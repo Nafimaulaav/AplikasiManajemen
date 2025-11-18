@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('greenhouse', function (Blueprint $table) {
+            $table->string('id_greenhouse', 10)->primary();
+            $table->string('nama_greenhouse', 50);
+            $table->string('lokasi_greenhouse', 100);
+            $table->enum('status_greenhouse', ['Aktif', 'Tidak Aktif']);
+            $table->datetime('tanggal_operasional')->current();
+            $table->integer('kapasitas');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('greenhouse');
+    }
+};
