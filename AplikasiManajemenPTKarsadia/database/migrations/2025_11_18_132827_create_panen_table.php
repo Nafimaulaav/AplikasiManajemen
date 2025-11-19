@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('panen', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('id_greenhouse', 10)->primary();
+            $table->string('tanggal_panen', 2);
+            $table->string('', 100);
+            $table->enum('', ['Aktif', '']);
+            $table->datetime('')->current();
+            $table->integer('');
         });
     }
 
