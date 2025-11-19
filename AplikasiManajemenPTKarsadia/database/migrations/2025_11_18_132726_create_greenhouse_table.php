@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('lokasi_greenhouse', 100); 
             $table->enum('status_greenhouse', ['Aktif', 'Tidak Aktif']); 
             $table->datetime('tanggal_operasional')->current(); 
-            $table->integer('kapasitas', 11);
+            $table->integer('kapasitas',);
         });
     }
 
