@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('jumlah_pendapatan');
 
             //foreign key id_pesanan
-            $table->string('id_pesanan')->unique();
+            $table->string('id_pesanan');
             $table->foreign('id_pesanan')->references('id_pesanan')->on('id_pesanan')->onDelete('cascade');
         });
     }
