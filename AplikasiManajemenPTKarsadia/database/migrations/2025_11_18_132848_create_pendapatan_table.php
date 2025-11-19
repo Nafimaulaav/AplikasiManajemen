@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('pendapatan', function (Blueprint $table) {
             $table->string('id_pendapatan')->primary();
-            $table->string('id_pesanan')->unique();
             $table->string('keterangan');
             $table->date('tanggal_transaksi');
             $table->string('jumlah_pendapatan');
+
+            //foreign key id_pesanan
+            $table->string('id_pesanan')->unique();
+            $table->foreign('id_pesanan')->references('id_pesanan')->on('id_pesanan')->onDelete('cascade');
         });
     }
 
