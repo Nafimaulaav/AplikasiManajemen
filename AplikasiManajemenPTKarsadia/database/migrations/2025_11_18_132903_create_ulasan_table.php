@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ulasan', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('feedback', function (Blueprint $table) {
+            $table->string('id_feedback', 10)->primary();
+            $table->string('id_pesanan', 10);
+            $table->integer('rating');
+            $table->text('isi_feedback')->nullable();
+            $table->date('tanggal_feedback');
         });
     }
 
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ulasan');
+        Schema::dropIfExists('feedback');
     }
 };
