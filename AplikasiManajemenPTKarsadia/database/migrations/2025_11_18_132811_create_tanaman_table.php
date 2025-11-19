@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('varietas', 100);
             $table->date('tanggal_tanam');
             $table->integer('jumlah_tanaman');
-            $table->enum('status_tumbuh', ['tumbuh', 'panen', 'mati']);
+            $table->enum('status_tumbuh', ['Tumbuh', 'Panen', 'Mati']);
             $table->date('perkiraan_panen');
 
             // foreign key id greenhouse

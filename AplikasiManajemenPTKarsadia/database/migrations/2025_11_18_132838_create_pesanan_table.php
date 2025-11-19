@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('tanggal_pesan');
             $table->date('tanggal_kirim');
             $table->integer('total_harga');
-            $table->enum('status_pesanan', ['dikemas', 'dikirim', 'diterima']);
+            $table->enum('status_pesanan', ['Dikemas', 'Dikirim', 'Diterima']);
         });
     }
 
