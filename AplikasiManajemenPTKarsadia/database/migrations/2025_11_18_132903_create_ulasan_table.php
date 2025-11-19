@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback', function (Blueprint $table) {
-            $table->string('id_feedback', 10)->primary();
+        Schema::create('ulasan', function (Blueprint $table) {
+            $table->string('id_usalasan', 10)->primary();
             $table->integer('rating');
-            $table->text('isi_feedback')->nullable();
-            $table->date('tanggal_feedback');
+            $table->text('isi_usalan')->nullable();
+            $table->date('tanggal_ulasan');
 
             // foreign key id pesanan
             $table->string('id_pesanan', 10);

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('id_pendapatan',10)->primary();
             $table->string('keterangan');
             $table->date('tanggal_transaksi');
-            $table->string('jumlah_pendapatan');
+            $table->integer('jumlah_pendapatan');
 
             //foreign key id_pesanan
             $table->string('id_pesanan', 10);
