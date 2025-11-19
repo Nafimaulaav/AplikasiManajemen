@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pendapatan', function (Blueprint $table) {
-            $table->string('id_pendapatan',10)->primary();
-            $table->string('keterangan');
+            $table->string('id_pendapatan')->primary();
+            $table->string('keterangan', 255);
             $table->date('tanggal_transaksi');
             $table->integer('jumlah_pendapatan');
 
