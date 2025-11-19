@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('panen', function (Blueprint $table) {
-            $table->string('id_panen', 10)->primary();
-            $table->string('id_greenhouse', 10);
-            $table->date('tanggal_panen');
-            $table->integer('jumlah_panen');
-            $table->enum('kualitas', ['Baik', 'Sedang', 'Buruk']);
+        Schema::create('greenhouse', function (Blueprint $table) {
+            $table->string('id_greenhouse', 10)->primary(); 
+            $table->string('nama_greenhouse', 50); 
+            $table->string('lokasi_greenhouse', 100); 
+            $table->enum('status_greenhouse', ['Aktif', 'Tidak Aktif']); 
+            $table->datetime('tanggal_operasional')->current(); 
+            $table->integer('kapasitas', 11);
         });
     }
 
