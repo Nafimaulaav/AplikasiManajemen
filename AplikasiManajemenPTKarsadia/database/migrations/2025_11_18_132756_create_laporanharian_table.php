@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('laporanharian', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('id_laporanharian', 10)->primary();
+            $table->dateTime('tanggal_laporan')->current();
+            $table->string('aktivitas', 255);
+            $table->string('catatan', 255);
+            $table->string('gambar');
+
+            // foreign key id greenhouse
+            $table->string('id_greenhouse', 10);
+            $table->foreign('id_greenhouse')->references('id_greenhouse')->on('greenhouse')->onDelete('cascade');
         });
     }
 
