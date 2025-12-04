@@ -15,10 +15,10 @@ return new class extends Migration
             $table->string('id_pesanan', 10)->primary();
             $table->string('nama_pelanggan');
             $table->string('alamat');
-            $table->date('tanggal_pesan');
-            $table->date('tanggal_kirim');
-            $table->integer('total_harga');
-            $table->enum('status_pesanan', ['Dikemas', 'Dikirim', 'Diterima']);
+            $table->date('tanggal_pesan')->default(now()); // ni biar defaultnya sekarang
+            $table->date('tanggal_kirim')->nullable(); // biar bisa null dulu
+            $table->bigInteger('total_harga');
+            $table->enum('status_pesanan', ['Dikemas', 'Dikirim', 'Diterima'])->default('Dikemas');
         });
     }
 

@@ -33,6 +33,19 @@ class ModelUser extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    // auto generate ID "U0001"
+    protected static function boot()
+{
+    parent::boot();
+
+    static::creating(function ($model) {
+        if (!$model->id_user) {
+            $last = self::orderBy('id_user', 'desc')->first();
+            $num = $last ? intval(substr($last->id_user, 1)) + 1 : 1;
+            $model->id_user = 'U' . str_pad($num, 4, '0', STR_PAD_LEFT);
+        }
+    });
 }
 
-?>
+}

@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class ModelGreenhouse extends Authenticatable
+class ModelGreenhouse extends Model
 {
     // buat nama tabel
     protected $table = 'greenhouse';
@@ -29,6 +26,49 @@ class ModelGreenhouse extends Authenticatable
         'tanggal_operasional',
         'kapasitas'
     ];
+
+    // relasi ke model laporan harian
+    public function laporanHarian()
+    {
+        return $this->hasMany(ModelLaporanHarian::class, 'id_greenhouse', 'id_greenhouse');
+    }
+
+    // relasi ke model tanaman
+        public function tanaman()
+    {
+        return $this->hasMany(ModelTanaman::class, 'id_greenhouse', 'id_greenhouse');
+    }
+
+    // relasi ke model panen
+    public function panen()
+    {
+        return $this->hasMany(ModelPanen::class, 'id_greenhouse', 'id_greenhouse');
+    }
+
+     protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (! $model->id_greenhouse) {
+                $model->id_greenhouse = self::generateId();
+            }
+        });
+    }
+
+    // buat generate id greenhouse
+    private static function generateId()
+    {
+        // ambil ID terbesar
+        $last = self::orderBy('id_greenhouse', 'desc')->first();
+        if (!$last) {
+            return 'GH0001';
+        }
+        // ambil angka setelah GH
+        $num = intval(substr($last->id_greenhouse, 2)) + 1;
+        // format ulang GH + nomor
+        return 'GH' . str_pad($num, 4, '0', STR_PAD_LEFT);
+    }
+
 }
 
-?>

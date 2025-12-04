@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('laporanharian', function (Blueprint $table) {
             $table->string('id_laporanharian', 10)->primary();
-            $table->dateTime('tanggal_laporan')->current();
+            $table->dateTime('tanggal_laporan')->useCurrent();
             $table->string('aktivitas', 255);
             $table->string('catatan', 255);
             $table->string('gambar');
@@ -32,3 +32,5 @@ return new class extends Migration
         Schema::dropIfExists('laporanharian');
     }
 };
+
+
