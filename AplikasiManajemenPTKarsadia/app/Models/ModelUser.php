@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class CobaUser extends Authenticatable
+class ModelUser extends Authenticatable
 {
     // buat nama tabel
     protected $table = 'users';

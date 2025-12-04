@@ -4,15 +4,16 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class CobaGreenhouse extends Authenticatable
+class ModelPesanan extends Model
 {
     // buat nama tabel
-    protected $table = 'greenhouse';
+    protected $table = 'pesanan';
     // buat bikin primary key
-    protected $primaryKey = 'id_greenhouse';
+    protected $primaryKey = 'id_pesanan';
     // biar kaga auto increment, soalnya pake string, pengen biar U0001 gitu dah
     public $incrementing = false;
     // buat tipe data primary key string
@@ -22,12 +23,13 @@ class CobaGreenhouse extends Authenticatable
 
     // kolom yg bisa diisi
     protected $fillable = [
-        'id_greenhouse',
-        'nama_greenhouse',
-        'lokasi_greenhouse',
-        'status_greenhouse',
-        'tanggal_operasional',
-        'kapasitas'
+        'id_pesanan',
+        'nama_pelanggan',
+        'alamat',
+        'tanggal_pesan',
+        'tanggal_kirim',
+        'total_harga',
+        'status_pesanan'
     ];
 }
 

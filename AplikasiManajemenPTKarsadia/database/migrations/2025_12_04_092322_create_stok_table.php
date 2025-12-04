@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ulasan', function (Blueprint $table) {
-            $table->string('id_ulasan', 10)->primary();
-            $table->integer('rating');
-            $table->text('isi_ulasan')->nullable();
-            $table->date('tanggal_ulasan');
+        Schema::create('stok', function (Blueprint $table) {
+            $table->string('nama_barang');
+            $table->integer('jumlah_barang');
 
-            // foreign key id pesanan
+            // foreign key id panen ama pesanan
+            $table->string('id_panen', 10);
+            $table->foreign('id_panen')->references('id_panen')->on('panen')->onDelete('cascade');
+
             $table->string('id_pesanan', 10);
             $table->foreign('id_pesanan')->references('id_pesanan')->on('pesanan')->onDelete('cascade');
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('stok');
     }
 };
