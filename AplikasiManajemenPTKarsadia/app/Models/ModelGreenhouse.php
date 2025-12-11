@@ -22,6 +22,7 @@ class ModelGreenhouse extends Model
         'id_greenhouse',
         'nama_greenhouse',
         'alamat_greenhouse',
+        'gambar_greenhouse',
         'status_greenhouse',
         'suhu_greenhouse',
         'kelembaban_greenhouse',
@@ -38,10 +39,10 @@ class ModelGreenhouse extends Model
         return $this->hasMany(ModelLaporanHarian::class, 'id_greenhouse', 'id_greenhouse');
     }
 
-    // relasi ke model tanaman
-        public function tanaman()
+    // relasi ke model log qc
+    public function logQC()
     {
-        return $this->hasMany(ModelTanaman::class, 'id_greenhouse', 'id_greenhouse');
+        return $this->hasMany(ModelQC::class, 'id_greenhouse', 'id_greenhouse');
     }
 
     // relasi ke model panen
