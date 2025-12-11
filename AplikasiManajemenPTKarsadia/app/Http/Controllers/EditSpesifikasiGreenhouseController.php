@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ModelGreenhouse;
 
 class EditSpesifikasiGreenhouseController extends Controller
 {
@@ -29,6 +30,6 @@ class EditSpesifikasiGreenhouseController extends Controller
         ]);
 
         // balik ke halaman detail greenhouse dengan pesan sukses
-        
+
     }
 }

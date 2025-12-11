@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ModelGreenhouse;
 
 class EditMonitorGreenhouseController extends Controller
 {
     // nampilin form edit monitor greenhouse
     public function FormEditMonitorGH($id_greenhouse)
     {
-        
+        // NTARAN ISINYA
     }
 
     // update data monitor greenhouse
