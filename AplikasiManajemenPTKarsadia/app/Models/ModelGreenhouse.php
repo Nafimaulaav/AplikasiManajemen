@@ -21,10 +21,15 @@ class ModelGreenhouse extends Model
     protected $fillable = [
         'id_greenhouse',
         'nama_greenhouse',
-        'lokasi_greenhouse',
+        'alamat_greenhouse',
         'status_greenhouse',
-        'tanggal_operasional',
-        'kapasitas'
+        'suhu_greenhouse',
+        'kelembaban_greenhouse',
+        'intensitas_cahaya_greenhouse',
+        'volume_air_greenhouse',
+        'luas_greenhouse',
+        'tinggi_greenhouse',
+        'sistem_dipakai_greenhouse'
     ];
 
     // relasi ke model laporan harian

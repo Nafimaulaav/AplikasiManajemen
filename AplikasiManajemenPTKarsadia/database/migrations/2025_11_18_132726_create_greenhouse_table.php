@@ -14,10 +14,15 @@ return new class extends Migration
         Schema::create('greenhouse', function (Blueprint $table) {
             $table->string('id_greenhouse', 10)->primary(); 
             $table->string('nama_greenhouse', 50); 
-            $table->string('lokasi_greenhouse', 100); 
-            $table->enum('status_greenhouse', ['Aktif', 'Tidak Aktif'])->default('Aktif'); 
-            $table->datetime('tanggal_operasional')->current(); 
-            $table->integer('kapasitas',);
+            $table->string('alamat_greenhouse', 100); 
+            $table->enum('status_greenhouse', ['Aktif', 'Tidak Aktif', 'Perbaikan'])->default('Tidak Aktif'); 
+            $table->float('suhu_greenhouse')->nullable(); 
+            $table->float('kelembaban_greenhouse')->nullable(); 
+            $table->float('intensitas_cahaya_greenhouse')->nullable(); 
+            $table->float('volume_air_greenhouse')->nullable(); 
+            $table->float('luas_greenhouse')->nullable(); 
+            $table->float('tinggi_greenhouse')->nullable(); 
+            $table->string('sistem_dipakai_greenhouse', 50)->nullable();
         });
     }
 
