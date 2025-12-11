@@ -22,6 +22,7 @@ class ModelGreenhouse extends Model
         'id_greenhouse',
         'nama_greenhouse',
         'alamat_greenhouse',
+        'gambar_greenhouse',
         'status_greenhouse',
         'suhu_greenhouse',
         'kelembaban_greenhouse',
