@@ -1,20 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title')</title>
+@extends('layouts.app')
+@section('content')
 
+<div class="overlay">
+    <div value="login-container">
+        <h2>Masuk</h2>
 
+        @if ($errors-> any())
+            <div class="error">
+                {{ $errors->first() }}
+            </div>
+        @endif
+        <form action="{{ url('/login') }}" method="POST">
+            @csrf
 
-</head>
-<body>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required>
 
-    <div class="login-container">
-        <div class="login-card">
-            @yield('content')
-        </div>
+            </div>
+
+            <div class="form-group">
+                <label>Kata Sandi</label>
+                <input type="password" name="password" required>
+
+            </div>
+
+            <button type="submit" class="btn-login">Masuk</button>
+        </form>
+
     </div>
-
-</body>
-</html>
+</div>
+@endsection
