@@ -1,19 +1,4 @@
-<div class="header">
-    <div class="header-kiri">
-        <div class="logo-tempat">
-            <img src="{{ asset('gambar/') }}" class="logo-icon">
-            <span class="judul-apk">Karsadia Management</span>
-        </div>
-    </div>
-
-    <div class="header-kanan">
-        <img src="{{ asset('gambar/icon/') }}" class="icon-user" alt="User">
-        <span class="user-email">{{ Auth::user() }}</span>
-    </div>
-</div>
-
-<style>
-    .header{
+.header{
         background: #7ca55d;
         padding: 15px 20px;
         display: flex;
@@ -62,4 +47,3 @@
         font-weight: 500;
         color: white;
     }  
-</style>
