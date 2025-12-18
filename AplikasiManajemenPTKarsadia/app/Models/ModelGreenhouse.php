@@ -19,7 +19,6 @@ class ModelGreenhouse extends Model
 
     // kolom yg bisa diisi
     protected $fillable = [
-        'id_greenhouse',
         'nama_greenhouse',
         'alamat_greenhouse',
         'gambar_greenhouse',

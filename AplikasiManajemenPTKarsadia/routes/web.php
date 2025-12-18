@@ -13,6 +13,15 @@ Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.pro
 Route::get('/greenhouse/tambah', [TambahGreenhouseController::class, 'FormCreateGH'])->name('tambah_greenhouse');
 Route::post('/greenhouse/tambah', [TambahGreenhouseController::class, 'StoreGH'])->name('store_greenhouse');
 
-// buat route tambah qc
-Route::get('/greenhouse/{id_greenhouse}/qc/tambah', [TambahQCController::class, 'FormTambahQC'])->name('tambah_qc');
-Route::post('/qc/tambah', [TambahQCController::class, 'StoreQC'])->name('store_qc');
+// buat route qc
+Route::prefix('qc')->group(function () {
+    // nambahin QC
+    Route::get('/tambah/{id_greenhouse}', [QCController::class, 'FormCreateQC'])->name('tambah_qc');
+    // nyimpen data QC baru
+    Route::post('/tambah', [QCController::class, 'StoreQC'])->name('store_qc');
+    // ngedit QC
+    Route::get('/edit/{id_log_qc}', [QCController::class, 'FormEditQC'])->name('edit_qc');
+    Route::post('/edit/{id_log_qc}', [QCController::class, 'UpdateQC'])->name('update_qc');
+    // ngehapus QC
+    Route::delete('/hapus/{id_log_qc}', [QCController::class, 'DestroyQC'])->name('destroy_qc');
+});

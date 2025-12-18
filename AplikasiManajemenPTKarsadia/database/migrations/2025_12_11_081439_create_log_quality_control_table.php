@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_log_qc');
             $table->dateTime('tanggal_qc');
             $table->string('nama_petugas');
+            $table->string('gambar_qc')->nullable();
             $table->string('varietas_melon');
             $table->enum('status_tumbuh', ['Vegetatif', 'Generatif','Panen', 'Gegetatif']);
             $table->integer('total_tanaman');

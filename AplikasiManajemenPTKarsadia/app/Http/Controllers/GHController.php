@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\ModelGreenhouse;
+
+class GHController extends Controller
+{
+    // buat nampilin halaman greenhouse
+    public function index()
+    {
+        $greenhouses = ModelGreenhouse::all();
+        return view('greenhouse.index', compact('greenhouses'));
+    }
+
+    // buat form tambah greenhouse
+    public function create()
+    {
+        return view('greenhouse.create');
+    }
+
+    // buat nyimpen greenhouse baru di form tambah
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_greenhouse' => 'required|string|max:100',
+            'alamat_greenhouse' => 'required|string|max:255',
+            'gambar_greenhouse' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+        ]);
+
+        $greenhouse = ModelGreenhouse::create([
+            'nama_greenhouse' => $validated['nama_greenhouse'],
+            'alamat_greenhouse' => $validated['alamat_greenhouse'],
+        ]);
+
+        if ($request->hasFile('gambar_greenhouse')) {
+            $imagePath = $request->file('gambar_greenhouse')->store('greenhouse_images', 'public');
+            $greenhouse->gambar_greenhouse = $imagePath;
+            $greenhouse->save();
+        }
+
+        return redirect()
+            ->route('greenhouse.index')
+            ->with('success', 'Greenhouse berhasil ditambahkan');
+    }
+
+    // buat nampilin detail greenhouse
+    public function show($id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::with('LogQC')
+            ->where('id_greenhouse', $id_greenhouse)
+            ->firstOrFail();
+        return view('greenhouse.show', compact('greenhouse'));
+    }
+
+    // buat update monitoring GH
+    public function updateMonitoring(Request $request, $id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+
+        $validated = $request->validate([
+            'suhu_greenhouse' => 'required|numeric',
+            'kelembaban_greenhouse' => 'required|numeric',
+            'intensitas_cahaya_greenhouse' => 'required|numeric',
+            'volume_air_greenhouse' => 'required|numeric',
+        ]);
+
+        $greenhouse->update($validated);
+
+        return redirect()
+            ->route('greenhouse.show', $id_greenhouse)
+            ->with('success', 'Monitoring greenhouse berhasil diperbarui');
+    }
+
+    // buat update spek GH
+    public function updateSpecs(Request $request, $id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+
+        $validated = $request->validate([
+            'luas_greenhouse' => 'required|numeric',
+            'tinggi_greenhouse' => 'required|numeric',
+            'sistem_dipakai_greenhouse' => 'required|string|max:100',
+        ]);
+
+        $greenhouse->update($validated);
+
+        return redirect()
+            ->route('greenhouse.show', $id_greenhouse)
+            ->with('success', 'Spesifikasi greenhouse berhasil diperbarui');
+    }
+}
