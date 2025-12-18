@@ -10,7 +10,7 @@
                 {{ $errors->first() }}
             </div>
         @endif
-        <form action="{{ url('/login') }}" method="POST">
+        <form action="{{ url('login') }}" method="POST">
             @csrf
 
             <div class="form-group">
