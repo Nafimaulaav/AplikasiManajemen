@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('laporanharian', function (Blueprint $table) {
             $table->string('id_laporanharian', 10)->primary();
+            $table->string('judul_laporan');
             $table->dateTime('tanggal_laporan')->useCurrent();
-            $table->string('aktivitas', 255);
+            $table->enum('aktivitas', ['Perawatan','Penanaman','Pembersihan']);
+            $table->string('nama_petugas', 255);
+            $table->string('gambar_laporan');
             $table->string('catatan', 255);
-            $table->string('gambar');
+
 
             // foreign key id greenhouse
             $table->string('id_greenhouse', 10);

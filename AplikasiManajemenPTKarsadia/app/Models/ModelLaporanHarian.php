@@ -20,10 +20,12 @@ class ModelLaporanHarian extends Model
     // kolom yg bisa diisi
     protected $fillable = [
         'id_laporanharian',
+        'judul_laporan',
         'tanggal_laporan',
         'aktivitas',
+        'nama_petugas',
+        'gambar_laporan',
         'catatan',
-        'gambar',
         'id_greenhouse'
     ];
 
