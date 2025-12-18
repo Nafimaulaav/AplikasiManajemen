@@ -12,12 +12,10 @@ class ModelQC extends Model
     protected $primaryKey = 'id_log_qc';
     // buat increment
     public $incrementing = true;
-    protected $keyType = 'int';
 
 
     // kolom yg bisa diisi
     protected $fillable = [
-        'id_log_qc',
         'tanggal_qc',
         'nama_petugas',
         'gambar_qc',
