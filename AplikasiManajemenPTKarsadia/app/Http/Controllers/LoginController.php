@@ -12,7 +12,7 @@ class LoginController extends Controller
     // nampilin form login
     public function loginForm()
     {
-        return view('login');
+        return view('auth/login');
     }
 
     // proses login

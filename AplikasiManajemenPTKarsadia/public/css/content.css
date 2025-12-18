@@ -1,0 +1,19 @@
+.content{
+    flex: 1;
+    padding: 20px;
+    background-color: #F5F5F5;
+    min-height: calc(100vh - 55px);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat';
+}
+
+body {
+    background-color: #f4f6f8;
+    font-size: 14px;
+    color: #2d3748;
+}

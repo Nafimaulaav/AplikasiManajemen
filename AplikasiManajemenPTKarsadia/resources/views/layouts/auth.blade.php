@@ -1,24 +1,23 @@
  <!DOCTYPE html>
  <html lang="en">
  <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karsadia Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Karsadia Management</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/content.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
  </head>
- 
  <body>
-    @include('partials.header')
-    @include('partials.sidebar')
-    <div class="content">
+   <header>
+      @include('partials.header')
+   </header>
+    
+    <div class="auth-content">
         @yield('content')
     </div>
  </body>
