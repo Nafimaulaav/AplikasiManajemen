@@ -20,6 +20,7 @@ class ModelQC extends Model
         'id_log_qc',
         'tanggal_qc',
         'nama_petugas',
+        'gambar_qc',
         'varietas_melon',
         'status_tumbuh',
         'total_tanaman',
