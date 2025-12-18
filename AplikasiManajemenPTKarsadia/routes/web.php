@@ -2,16 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\TambahGreenhouseController;
-use App\Http\Controllers\TambahQCController;
+use App\Http\Controllers\GHController;
+use App\Http\Controllers\QCController;
 
 // buat route login
 Route::get('/login', [LoginController::class, 'loginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.process');
 
-// buat route tambah greenhouse
-Route::get('/greenhouse/tambah', [TambahGreenhouseController::class, 'FormCreateGH'])->name('tambah_greenhouse');
-Route::post('/greenhouse/tambah', [TambahGreenhouseController::class, 'StoreGH'])->name('store_greenhouse');
+// buat route greenhouse
+Route::prefix('greenhouse')->group(function () {
+    // nambahin greenhouse
+    Route::get('/tambah', [GHController::class, 'FormCreateGreenhouse'])->name('tambah_greenhouse');
+    // nyimpen data greenhouse baru
+    Route::post('/tambah', [GHController::class, 'StoreGreenhouse'])->name('store_greenhouse');
+    // ngedit greenhouse
+    Route::get('/edit/{id_greenhouse}', [GHController::class, 'FormEditGreenhouse'])->name('edit_greenhouse');
+    Route::post('/edit/{id_greenhouse}', [GHController::class, 'UpdateGreenhouse'])->name('update_greenhouse');
+    // ngehapus greenhouse
+    Route::delete('/hapus/{id_greenhouse}', [GHController::class, 'DestroyGreenhouse'])->name('destroy_greenhouse');
+});
 
 // buat route qc
 Route::prefix('qc')->group(function () {
