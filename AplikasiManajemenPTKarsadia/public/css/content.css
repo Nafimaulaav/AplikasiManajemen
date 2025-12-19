@@ -1,9 +1,28 @@
-.content{
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-main {
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #F5F5F5;
+  min-height: calc(100vh - 60px); /* sesuaikan dengan tinggi header */
+}
+
+
+/* .content{
     flex: 1;
     padding: 20px;
     background-color: #F5F5F5;
     min-height: calc(100vh - 55px);
-}
+} */
 
 * {
     margin: 0;

@@ -75,7 +75,7 @@ class GHController extends Controller
         $greenhouse = ModelGreenhouse::with('LogQC')
             ->where('id_greenhouse', $id_greenhouse)
             ->firstOrFail();
-        return view('greenhouse.show', compact('greenhouse'));
+        return view('greenhouse.detailgh', compact('greenhouse')); // gw ngubah greenhouse.show jadi greenhouse.detailgh
     }
 
     // buat update monitoring GH
@@ -84,6 +84,7 @@ class GHController extends Controller
         $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
 
         $validated = $request->validate([
+            'waktu_monitoring' => 'required|date',
             'suhu_greenhouse' => 'required|numeric',
             'kelembaban_greenhouse' => 'required|numeric',
             'intensitas_cahaya_greenhouse' => 'required|numeric',
@@ -93,7 +94,7 @@ class GHController extends Controller
         $greenhouse->update($validated);
 
         return redirect()
-            ->route('greenhouse.show', $id_greenhouse)
+            ->route('detail_greenhouse', $id_greenhouse)
             ->with('success', 'Monitoring greenhouse berhasil diperbarui');
     }
 

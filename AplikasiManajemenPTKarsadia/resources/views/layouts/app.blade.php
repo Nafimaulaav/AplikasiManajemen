@@ -19,10 +19,16 @@
  </head>
  
  <body>
-    @include('partials.header')
-    @include('partials.sidebar')
-    <div class="content">
-        @yield('content')
-    </div>
+   <div class="layout-wrapper">
+      @include('partials.header')
+
+      <div class="layout-main">
+         @include('partials.sidebar')
+
+         <div class="content">
+            @yield('content')
+         </div>
+      </div>
+   </div>
  </body>
  </html>

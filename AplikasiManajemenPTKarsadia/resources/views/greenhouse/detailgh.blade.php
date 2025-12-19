@@ -17,10 +17,10 @@
             <div class="gh-section">
                 <div class="gh-section-header">
                     <h2>Monitoring</h2>
-                    <a href="{{ route('updateMonitoring', $greenhouse->id_greenhouse) }}" class="gh-btn-ubah">Ubah</a>
+                    <a href="{{ route('monitoring_edit', $greenhouse->id_greenhouse) }}" class="gh-btn-ubah">Ubah</a>
                 </div>
                 <ul class="gh-list">
-                    <li><strong>Waktu Monitoring:</strong> {{ $greenhouse->updated_at->format('d/m/Y H:i') }}</li>
+                    <li><strong>Waktu Monitoring:</strong> {{ optional($greenhouse->waktu_monitoring)->format('d/m/Y H:i') ?? '-' }}</li>
                     <li><strong>Suhu:</strong> {{ $greenhouse->suhu_greenhouse }}°C</li>
                     <li><strong>Kelembapan:</strong> {{ $greenhouse->kelembaban_greenhouse }}%</li>
                     <li><strong>Intensitas Cahaya:</strong> {{ $greenhouse->intensitas_cahaya_greenhouse }} lux</li>
@@ -32,7 +32,7 @@
             <div class="gh-section">
                 <div class="gh-section-header">
                     <h2>Spesifikasi</h2>
-                    <a href="{{ route('updateSpecs', $greenhouse->id_greenhouse) }}" class="gh-btn-ubah">Ubah</a>
+                    <a href="{{ route('spesifikasi_edit', $greenhouse->id_greenhouse) }}" class="gh-btn-ubah">Ubah</a>
                 </div>
                 <ul class="gh-list">
                     <li><strong>Luas:</strong> {{ $greenhouse->luas_greenhouse }} m²</li>
@@ -47,7 +47,7 @@
         <div class="gh-right">
             <div class="gh-section-header">
                 <h2 class="gh-qc-title">Riwayat Kontrol Kualitas</h2>
-                <a href="{{ route('qc.create', $greenhouse->id_greenhouse) }}" class="gh-btn-tambah">+ Tambah</a>
+                <a href="{{ route('tambah_qc', $greenhouse->id_greenhouse) }}" class="gh-btn-tambah">+ Tambah</a>
             </div>
 
             @foreach($greenhouse->LogQC as $qc)
@@ -73,7 +73,7 @@
                 </ul>
 
                 <div class="gh-qc-actions">
-                    <a href="{{ route('qc.edit', $qc->id_log_qc) }}" class="gh-btn-edit">
+                    <a href="{{ route('edit_qc', $qc->id_log_qc) }}" class="gh-btn-edit">
                         <i class="bi bi-pencil-fill"></i> Edit
                     </a>
                     <form action="{{ route('qc.destroy', $qc->id_log_qc) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
