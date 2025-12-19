@@ -11,15 +11,17 @@ Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.pro
 
 // buat route greenhouse
 Route::prefix('greenhouse')->group(function () {
-    // nambahin greenhouse
+    // nambahin greenhouse + nyimpen data greenhouse baru
+    Route::middleware('role:admin,petugas')->group(function(){
     Route::get('/tambah', [GHController::class, 'FormCreateGreenhouse'])->name('tambah_greenhouse');
-    // nyimpen data greenhouse baru
     Route::post('/tambah', [GHController::class, 'StoreGreenhouse'])->name('store_greenhouse');
-    // ngedit greenhouse
-    Route::get('/edit/{id_greenhouse}', [GHController::class, 'FormEditGreenhouse'])->name('edit_greenhouse');
-    Route::post('/edit/{id_greenhouse}', [GHController::class, 'UpdateGreenhouse'])->name('update_greenhouse');
-    // ngehapus greenhouse
-    Route::delete('/hapus/{id_greenhouse}', [GHController::class, 'DestroyGreenhouse'])->name('destroy_greenhouse');
+    });
+    // ngedit  apus greenhouse
+    Route::middleware('role:admin')->group(function(){
+        Route::get('/edit/{id_greenhouse}', [GHController::class, 'FormEditGreenhouse'])->name('edit_greenhouse');
+        Route::post('/edit/{id_greenhouse}', [GHController::class, 'UpdateGreenhouse'])->name('update_greenhouse');
+        Route::delete('/hapus/{id_greenhouse}', [GHController::class, 'DestroyGreenhouse'])->name('destroy_greenhouse');
+    });
 });
 
 // buat route qc

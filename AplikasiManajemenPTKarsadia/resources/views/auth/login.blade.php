@@ -16,7 +16,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label>Email</label>
+                    <label>User </label>
                     <input type="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email"required>
 
                 </div>

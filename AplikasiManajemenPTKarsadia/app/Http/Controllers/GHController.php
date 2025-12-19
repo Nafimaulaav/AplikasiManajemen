@@ -32,6 +32,7 @@ class GHController extends Controller
         $greenhouse = ModelGreenhouse::create([
             'nama_greenhouse' => $validated['nama_greenhouse'],
             'alamat_greenhouse' => $validated['alamat_greenhouse'],
+            'status_greenhouse' => 'Tidak Aktif',
         ]);
 
         if ($request->hasFile('gambar_greenhouse')) {
@@ -44,6 +45,28 @@ class GHController extends Controller
             ->route('greenhouse.index')
             ->with('success', 'Greenhouse berhasil ditambahkan');
     }
+
+    //form updete list greenhouse
+    public function FromUpdateGreenhouse($id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+        return view('greenhouse.edit', compact('greenhouse'));
+    }
+
+    //update greenhouse
+    public function UpdateGreenhouse(Request $request, $id_greenhouse){
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+
+        $validated = $request->validate([
+            'nama_greenhouse' => 'required|string|max:100',
+            'alamat_greenhouse' => 'required|string|max:255',
+            'status_greenhouse' => 'required|in:Aktif,Tidak Aktif,Perbaikan',
+        ]);
+
+        $greenhouse->update($validated);
+        return redirect()->route('greenhouse.index')->with('success', 'Greenhouse berhasil diperbarui');
+    }
+
 
     // buat nampilin detail greenhouse
     public function show($id_greenhouse)

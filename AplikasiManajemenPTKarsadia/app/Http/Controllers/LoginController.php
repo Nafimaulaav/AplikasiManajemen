@@ -12,7 +12,7 @@ class LoginController extends Controller
     // nampilin form login
     public function loginForm()
     {
-        return view('auth/login');
+        return view('auth.login');
     }
 
     // proses login
@@ -20,7 +20,7 @@ class LoginController extends Controller
     {
         // validasi input 
         $request->validate([
-            'email' => 'required|email',
+            'usernama' => 'required',
             'password' => 'required'
         ]);
 
@@ -54,6 +54,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect('auth/login');
     }
 }

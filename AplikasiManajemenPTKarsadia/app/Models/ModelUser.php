@@ -23,8 +23,7 @@ class ModelUser extends Authenticatable
     // kolom yg bisa diisi
     protected $fillable = [
         'id_user',
-        'nama_user',
-        'email',
+        'username',
         'password',
         'role'
     ];
