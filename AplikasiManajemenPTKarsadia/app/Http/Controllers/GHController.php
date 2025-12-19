@@ -27,12 +27,13 @@ class GHController extends Controller
             'nama_greenhouse' => 'required|string|max:100',
             'alamat_greenhouse' => 'required|string|max:255',
             'gambar_greenhouse' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'status_greenhouse' => 'required|in:Aktif,Tidak Aktif,Perbaikan',
         ]);
 
         $greenhouse = ModelGreenhouse::create([
             'nama_greenhouse' => $validated['nama_greenhouse'],
             'alamat_greenhouse' => $validated['alamat_greenhouse'],
-            'status_greenhouse' => 'Tidak Aktif',
+            'status_greenhouse' => $validated['status_greenhouse'],
         ]);
 
         if ($request->hasFile('gambar_greenhouse')) {
