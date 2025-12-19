@@ -20,18 +20,18 @@ class LoginController extends Controller
     {
         // validasi input 
         $request->validate([
-            'usernama' => 'required',
+            'username' => 'required',
             'password' => 'required'
         ]);
 
         // cek email dan password berhasil
-        if (Auth::attempt($request->only('email','password'))) {
+        if (Auth::attempt($request->only('username','password'))) {
             $request->session()->regenerate();
             return $this->redirectToDashboard();
         }
         // klo gagal
         return back()
-        ->withErrors(['email'=>'Email atau Password salah'])
+        ->withErrors(['username'=>'Username atau Password salah'])
         ->withInput();
     }
 
