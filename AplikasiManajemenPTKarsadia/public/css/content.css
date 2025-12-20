@@ -11,7 +11,9 @@
 
 .content {
   flex: 1;
-  padding: 20px;
+  margin-left: 220px;
+  padding: 40px;
+  padding-top: 120px;
   background-color: #F5F5F5;
   min-height: calc(100vh - 60px); /* sesuaikan dengan tinggi header */
 }

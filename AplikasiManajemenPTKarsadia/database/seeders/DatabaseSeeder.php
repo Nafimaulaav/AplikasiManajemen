@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        // ni buat seeder user admin
         // ModelUser::create([
         //     'id_user' => 'U0001',
         //     'username' => 'admin',
@@ -25,8 +26,14 @@ class DatabaseSeeder extends Seeder
         //     'role' => 'admin',
         // ]);
 
+        // ni buat seeder gh
         $this->call([
             GreenhouserSeeder::class,
+        ]);
+
+        // ni buat seeder qc
+        $this->call([
+            QCSeeder::class,
         ]);
     }
 }

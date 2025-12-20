@@ -22,7 +22,7 @@ class QCController extends Controller
         $validated = $request->validate([
             'tanggal_qc' => 'required|date',
             'nama_petugas' => 'required|string|max:50',
-            'gambar_qc' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'gambar_qc.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'varietas_melon' => 'required|string|max:50',
             'status_tumbuh' => 'required|in:Vegetatif,Generatif,Panen,Gegetatif',
             'total_tanaman' => 'required|integer|min:0',
@@ -32,6 +32,15 @@ class QCController extends Controller
             'jumlah_tanaman_mati' => 'required|integer|min:0',
             'id_greenhouse' => 'required|exists:greenhouse,id_greenhouse',
         ]);
+
+        $gambarPaths = [];
+        if ($request->hasFile('gambar_qc')) {
+            foreach ($request->file('gambar_qc') as $image) {
+                $path = $image->store('qc_images', 'public');
+                $gambarPaths[] = $path;
+            }
+        }
+        $validated['gambar_qc'] = $gambarPaths;
 
         ModelQC::create($validated);
 

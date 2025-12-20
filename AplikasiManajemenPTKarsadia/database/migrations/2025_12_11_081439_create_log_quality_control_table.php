@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('log_quality_control', function (Blueprint $table) {
+            $table->timestamps();
             $table->id('id_log_qc');
             $table->dateTime('tanggal_qc');
             $table->string('nama_petugas');
-            $table->string('gambar_qc')->nullable();
+            $table->json('gambar_qc')->nullable();
             $table->string('varietas_melon');
             $table->enum('status_tumbuh', ['Vegetatif', 'Generatif','Panen', 'Gegetatif']);
             $table->integer('total_tanaman');
@@ -38,5 +39,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('log_quality_control');
+        Schema::table('log_quality_control', function (Blueprint $table) {
+            $table->dropTimestamps();
+        } );
     }
 };

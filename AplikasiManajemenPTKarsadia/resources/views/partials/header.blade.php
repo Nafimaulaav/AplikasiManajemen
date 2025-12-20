@@ -1,7 +1,7 @@
 <div class="header">
     <div class="header-kiri">
         <div class="logo-tempat">
-            <img src="{{ asset('gambar/logo.png') }}" class="logo-icon">
+            <img src="{{ asset('images/logo-karsadia.png') }}" class="icon-logo">
             <span class="judul-apk">Karsadia Management</span>
         </div>
     </div>
