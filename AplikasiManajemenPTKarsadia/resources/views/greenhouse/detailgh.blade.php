@@ -329,8 +329,8 @@
 @endsection
 
 
-
 <script>
+// Fungsi buat buka dan tutup modal
     function openModal(id) {
         document.getElementById(id).style.display = 'block';
     }
