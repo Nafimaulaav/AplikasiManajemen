@@ -17,7 +17,7 @@
 
                 <div class="form-group">
                     <label>User </label>
-                    <input type="text" name="username" value="{{ old('username') }}" placeholder="Masukkan username"required>
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email"required>
 
                 </div>
 

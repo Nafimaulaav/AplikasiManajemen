@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('greenhouse', function (Blueprint $table) {
+            // $table->timestamp();
             $table->string('id_greenhouse', 10)->primary(); 
             $table->string('nama_greenhouse', 50); 
             $table->string('alamat_greenhouse', 100); 
             $table->string('gambar_greenhouse')->nullable();
-            $table->enum('status_greenhouse', ['Aktif', 'Tidak Aktif', 'Perbaikan'])->default('Tidak Aktif'); 
+            $table->enum('status_greenhouse', ['Aktif', 'Tidak Aktif', 'Perbaikan']); 
+            $table->dateTime('waktu_monitoring')->nullable();
             $table->float('suhu_greenhouse')->nullable(); 
             $table->float('kelembaban_greenhouse')->nullable(); 
             $table->float('intensitas_cahaya_greenhouse')->nullable(); 

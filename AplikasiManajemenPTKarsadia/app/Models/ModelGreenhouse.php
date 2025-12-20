@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ModelGreenhouse extends Model
 {
+    use HasFactory;
     // buat nama tabel
     protected $table = 'greenhouse';
     // buat bikin primary key
@@ -14,7 +16,7 @@ class ModelGreenhouse extends Model
     public $incrementing = false;
     // buat tipe data primary key string
     protected $keyType = 'string';
-    // biar kaga pake timestamps
+    // // biar kaga pake timestamps
     public $timestamps = false;
 
     // kolom yg bisa diisi
@@ -23,6 +25,7 @@ class ModelGreenhouse extends Model
         'alamat_greenhouse',
         'gambar_greenhouse',
         'status_greenhouse',
+        'waktu_monitoring',
         'suhu_greenhouse',
         'kelembaban_greenhouse',
         'intensitas_cahaya_greenhouse',

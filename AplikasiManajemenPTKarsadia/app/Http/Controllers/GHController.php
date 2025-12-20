@@ -80,12 +80,20 @@ class GHController extends Controller
 
 
     // buat nampilin detail greenhouse
-    public function show($id_greenhouse)
+public function show($id_greenhouse)
+{
+    $greenhouse = ModelGreenhouse::with(['LogQC' => function ($query) {
+        $query->orderBy('tanggal_qc', 'desc'); // atau 'created_at' kalau kamu mau urut berdasarkan waktu input
+    }])->findOrFail($id_greenhouse);
+
+    return view('greenhouse.detailgh', compact('greenhouse'));
+}
+
+    // buat form update monitoring GH
+    public function FormUpdateMonitoring($id_greenhouse)
     {
-        $greenhouse = ModelGreenhouse::with('LogQC')
-            ->where('id_greenhouse', $id_greenhouse)
-            ->firstOrFail();
-        return view('greenhouse.show', compact('greenhouse'));
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+        return view('greenhouse.detailgh', compact('greenhouse'));
     }
 
     // buat update monitoring GH
@@ -94,6 +102,7 @@ class GHController extends Controller
         $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
 
         $validated = $request->validate([
+            'waktu_monitoring' => 'required|date',
             'suhu_greenhouse' => 'required|numeric',
             'kelembaban_greenhouse' => 'required|numeric',
             'intensitas_cahaya_greenhouse' => 'required|numeric',
@@ -103,8 +112,16 @@ class GHController extends Controller
         $greenhouse->update($validated);
 
         return redirect()
-            ->route('greenhouse.show', $id_greenhouse)
+            ->route('detail_greenhouse', $id_greenhouse)
             ->with('success', 'Monitoring greenhouse berhasil diperbarui');
+    }
+
+
+    // buat form update spek GH
+    public function FormUpdateSpesifikasi($id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+        return view('update_spesifikasi', compact('greenhouse'));
     }
 
     // buat update spek GH
@@ -121,7 +138,7 @@ class GHController extends Controller
         $greenhouse->update($validated);
 
         return redirect()
-            ->route('greenhouse.show', $id_greenhouse)
+            ->route('detail_greenhouse', $id_greenhouse)
             ->with('success', 'Spesifikasi greenhouse berhasil diperbarui');
     }
 }

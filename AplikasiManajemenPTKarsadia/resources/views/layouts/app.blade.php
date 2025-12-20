@@ -18,13 +18,20 @@
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/content.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/detailgh.css') }}">
  </head>
  
  <body>
-    @include('partials.header')
-    @include('partials.sidebar')
-    <div class="content">
-        @yield('content')
-    </div>
+   <div class="layout-wrapper">
+      @include('partials.header')
+
+      <div class="layout-main">
+         @include('partials.sidebar')
+
+         <div class="content">
+            @yield('content')
+         </div>
+      </div>
+   </div>
  </body>
  </html>

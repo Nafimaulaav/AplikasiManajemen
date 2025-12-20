@@ -29,6 +29,11 @@ class ModelQC extends Model
         'id_greenhouse'
     ];
 
+    // cast gambar_qc ke array
+    protected $casts = [
+        'gambar_qc' => 'array',
+    ];
+
     // relasi ke model greenhouse
     public function greenhouse()
     {
