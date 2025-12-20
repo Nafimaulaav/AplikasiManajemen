@@ -20,12 +20,12 @@ class RoleMiddleware
 
         //kalau belum login
         if (!$user){
-            return redirect('auth/login')->with('error', 'Silahkan login terlebih dahulu');
+            return redirect('login')->with('error', 'Silahkan login terlebih dahulu');
         }
 
         //mengecek role
         if (!in_array($user->role, $roles)){
-            return redirect('auth/login')->with('error','Anda tidak memiliki akses kehalaman ini');
+            return redirect('login')->with('error','Anda tidak memiliki akses kehalaman ini');
         }
 
         return $next($request);

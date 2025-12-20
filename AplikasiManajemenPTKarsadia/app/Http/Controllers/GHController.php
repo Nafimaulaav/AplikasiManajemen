@@ -17,13 +17,22 @@ class GHController extends Controller
     // buat form tambah greenhouse
     public function create()
     {
-        return view('greenhouse.create');
+        // generate id
+        $last = ModelGreenhouse::orderBy('id_greenhouse', 'desc')->first();
+        if($last){
+            $num = intval(substr($last->id_greenhouse, 2)) + 1;
+            $newid = 'GH' . str_pad($num, 4, '0', STR_PAD_LEFT);
+        } else {
+            $newid = 'GH0001';
+        }
+        return view('greenhouse.create', compact('newid'));
     }
 
     // buat nyimpen greenhouse baru di form tambah
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'id_greenhouse' => 'required|string|max:10',
             'nama_greenhouse' => 'required|string|max:100',
             'alamat_greenhouse' => 'required|string|max:255',
             'gambar_greenhouse' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
@@ -31,6 +40,7 @@ class GHController extends Controller
         ]);
 
         $greenhouse = ModelGreenhouse::create([
+            'id_greenhouse' => $validated['id_greenhouse'],
             'nama_greenhouse' => $validated['nama_greenhouse'],
             'alamat_greenhouse' => $validated['alamat_greenhouse'],
             'status_greenhouse' => $validated['status_greenhouse'],

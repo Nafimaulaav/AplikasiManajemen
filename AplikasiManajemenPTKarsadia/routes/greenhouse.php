@@ -5,11 +5,15 @@ use App\Http\Controllers\GHController;
 
 // buat route greenhouse
 Route::prefix('greenhouse')->group(function () {
-    // nampilin daftar greenhouse
+    
+    
+    // nampilin daftar greenhous detail greenhouse
+    Route::middleware('role:admin,petugas')->group(function(){
     Route::get('/', [GHController::class, 'index'])->name('greenhouse.index');
-
-    // detail greenhouse
     Route::get('/{id_greenhouse}', [GHController::class, 'DetailGreenhouse'])->name('detail_greenhouse');
+    });
+
+    
 
 
     // nambahin greenhouse + nyimpen data greenhouse baru
