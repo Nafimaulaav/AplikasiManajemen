@@ -13,11 +13,11 @@ Route::prefix('greenhouse')->group(function () {
 
     // update monitoring greenhouse
     Route::get('/update-monitoring/{id_greenhouse}', [GHController::class, 'FormUpdateMonitoring'])->name('monitoring_edit');
-    Route::post('/update-monitoring/{id_greenhouse}', [GHController::class, 'updateMonitoring'])->name('monitoring_update');
+    Route::post('/update-monitoring/{id_greenhouse}', [GHController::class, 'updateMonitoring'])->name('update_monitoring');
 
     // update spesifikasi greenhouse
     Route::get('/update-spesifikasi/{id_greenhouse}', [GHController::class, 'FormUpdateSpesifikasi'])->name('spesifikasi_edit');
-    Route::post('/update-spesifikasi/{id_greenhouse}', [GHController::class, 'updateSpesifikasi'])->name('spesifikasi_update');
+    Route::post('/update-spesifikasi/{id_greenhouse}', [GHController::class, 'updateSpecs'])->name('update_specs');
 
     // nambahin greenhouse + nyimpen data greenhouse baru
     Route::middleware('role:admin,petugas')->group(function(){

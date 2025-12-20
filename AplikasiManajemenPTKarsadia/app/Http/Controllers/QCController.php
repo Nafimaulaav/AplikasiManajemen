@@ -45,7 +45,7 @@ class QCController extends Controller
         ModelQC::create($validated);
 
         return redirect()
-            ->route('greenhouse.show', $validated['id_greenhouse'])
+            ->route('detail_greenhouse', $validated['id_greenhouse'])
             ->with('success', 'Data QC berhasil ditambahkan');
     }
 
@@ -77,7 +77,7 @@ class QCController extends Controller
         $qc->update($validated);
 
         return redirect()
-            ->route('greenhouse.show', $qc->id_greenhouse)
+            ->route('detail_greenhouse', $qc->id_greenhouse)
             ->with('success', 'Data QC berhasil diperbarui');
     }
 
@@ -90,7 +90,7 @@ class QCController extends Controller
         $qc->delete();
 
         return redirect()
-            ->route('greenhouse.show', $id_greenhouse)
+            ->route('detail_greenhouse', $id_greenhouse)
             ->with('success', 'Data QC berhasil dihapus');
     }
 }
