@@ -1,6 +1,6 @@
 .login-bg {
     position: relative;
-    min-height: calc(100vh - 100px);
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -19,6 +19,7 @@
     position: relative;
     z-index: 1;
     height: 400px;
+    height: auto;
     width: 415px;
     max-width: calc(100% - 40px);
     background-color: white;

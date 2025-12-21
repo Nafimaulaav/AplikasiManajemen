@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // modal edit
     const editButtons = document.querySelectorAll('.edit-btn');
     editButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             const id = this.getAttribute('data-id');
             const nama = this.getAttribute('data-name');
             const alamat = this.getAttribute('data-alamat');
@@ -22,7 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // modal hapus
     const hapusButtons = document.querySelectorAll('.delete-btn');
     hapusButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             const id = this.getAttribute('data-id');
             document.getElementById('hapusId').value = id;
 

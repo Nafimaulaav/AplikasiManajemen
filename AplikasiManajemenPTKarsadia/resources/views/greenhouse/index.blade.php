@@ -3,49 +3,81 @@
 @section('content')
 
 <div class="container">
-    <h1 class="judulgh">Rumah Kaca</h1>
-
     <div id="alert-success"></div>
-    @if (Auth::user()->role === 'admin' || Auth::user()->role === 'petugas')
-        <div  class="btn-add-gh mb-3">
-            <button type="button" class="btn btn-tambah" data-bs-toggle="modal" data-bs-target="#modalTambahGH"></button>
-                <i class="bi bi-plus-circle-fill"></i> Tambah Rumah Kaca
-        </div>
-    @endif
-
+    <div class="header-gh d-flex justify-content-between align-items-center mb-4">
+        <h1 class="judulgh">Rumah Kaca</h1>
+        @if (Auth::user()->role === 'admin' || Auth::user()->role === 'petugas')
+            <button type="button" class="btn btn-tambah" data-bs-toggle="modal" data-bs-target="#modalTambahGH">
+                <i class="bi bi-plus"></i> Tambah Rumah Kaca
+            </button>
+        @endif
+    </div>
     <div class="card-list-gh">
-        @foreach ($greenhouse as $gh)
+        @foreach ($greenhouses as $gh)
         <div class="gh-card">
-            <div class="card-image-gh">
-                @if ($gh->gambar_greenhouse)
-                    <img src="{{ asset('storage/' . $gh->gambar_greenhouse) }}" alt="Gambar Rumah Kaca">
-                @else
-                    <img src="{{ asset('gambar/gh.jpg') }}" alt="Gambar Default Rumah Kaca">
+            <div class="card-header-gh d-flex justify-content-between align-items-center">
+                <div class="title-gh d-flex gap-3 align-items-center">
+                    <!-- Link detail hanya untuk judul + ID -->
+                    <a href="{{ route('detail_greenhouse', $gh->id_greenhouse) }}" class="gh-card-link">
+                        <h2 class="nama-gh">{{ $gh->nama_greenhouse }}</h2>
+                        <p class="id-gh">#{{ $gh->id_greenhouse }}</p>
+                    </a>
+                </div>
+
+                @if (Auth::user()->role === 'admin')
+                <div class="card-action-gh">
+                    <!-- Tombol edit/hapus tidak di dalam link -->
+                    <button type="button" class="btn edit-btn"
+                            data-id="{{ $gh->id_greenhouse }}"
+                            data-name="{{ $gh->nama_greenhouse }}"
+                            data-alamat="{{ $gh->alamat_greenhouse }}"
+                            data-status="{{ $gh->status_greenhouse }}"
+                            data-bs-toggle="modal" data-bs-target="#modalEditGH">
+                        <i class="bi bi-pencil-fill"></i> Ubah
+                    </button>
+                    <button type="button" class="btn btn-hapus"
+                            data-id="{{ $gh->id_greenhouse }}"
+                            data-bs-toggle="modal" data-bs-target="#modalHapusGH">
+                        <i class="bi bi-trash-fill"></i> Hapus
+                    </button>
+                </div>
                 @endif
             </div>
-            <div class="card-conten-gh">
-                <h2 class="nama-gh">{{ $gh->nama_greenhouse }}</h2>
-                <p class="id-gh">#{{ $gh->id_greenhouse }}</p>
-                <p class="info-gh">
-                    <strong>Status</strong>
-                    <span class="status-gh {{ strtolower(str_replace('','-', $gh->status_greenhouse)) }}">
-                        {{ $gh->status_greenhouse }}
-                    </span>
-                </p>
-                <p class="info-gh"><strong>Suhu: </strong> {{ $gh->suhu_greenhouse ?? '-' }}</p>
-                <p class="info-gh"><strong>Kelembapan: </strong> {{ $gh->kelembapan_greenhouse ?? '-' }}</p>
-                <p class="info-gh"><strong>Alamat: </strong> {{ $gh->alamat_greenhouse ?? '-' }}</p>
-            </div>
-            @if (Auth::user()->role === 'admin')
-            <div class="card-action-gh">
-                <button type="button" class="btn edit-btn" data-id= "{{ $gh->id_greenhouse }}" data-bs-toggle="model" data-bs-target="#modalEditGH">
-                    <i class="bi bi-pencil-fill"></i> Ubah
-                </button>
-                <button type="button" class="btn btn-hapus" data-id="{{ $gh->id_greenhouse}}" data-bs-toggle="modal" data-bs-target="#modalHapusGH">
-                    <i class="bi bi-trash-fill"></i> Hapus
-                </button>
-            </div>
-            @endif
+
+            <!-- Body card bisa juga dijadikan link penuh -->
+            <a href="{{ route('detail_greenhouse', $gh->id_greenhouse) }}" class="gh-card-link">
+                <div class="card-body-gh">
+                    <div class="card-image-gh">
+                        @if ($gh->gambar_greenhouse)
+                            <img src="{{ asset('storage/' . $gh->gambar_greenhouse) }}" alt="Gambar Rumah Kaca">
+                        @else
+                            <img src="{{ asset('gambar/gh.jpg') }}" alt="Gambar Default Rumah Kaca">
+                        @endif
+                    </div>
+                    <div class="card-conten-gh">
+                        <div class="info-row">
+                            <div class="info-label">Status:</div>
+                            <div class="info-value">
+                                <span class="status-gh {{ strtolower(str_replace(' ', '-', $gh->status_greenhouse)) }}">
+                                    {{ $gh->status_greenhouse }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Suhu:</div>
+                            <div class="info-value">{{ $gh->suhu_greenhouse ?? '-' }}°C</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Kelembapan:</div>
+                            <div class="info-value">{{ $gh->kelembaban_greenhouse ?? '-' }}%</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Alamat:</div>
+                            <div class="info-value">{{ $gh->alamat_greenhouse ?? '-'}}</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
         @endforeach
     </div>
@@ -95,7 +127,7 @@
 </div>
 
 <!-- edit -->
- <div class="modal-fade" id="modalEditGH" tabindex="-1" aria-hidden="true">
+ <div class="modal fade" id="modalEditGH" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,7 +169,7 @@
     </div>
  </div>
  <!-- hapus -->
-<div class="modal-fade" id="modalHapusGH" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalHapusGH" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

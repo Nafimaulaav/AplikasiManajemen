@@ -11,23 +11,20 @@ class GHController extends Controller
     public function index()
     {
         $greenhouses = ModelGreenhouse::all();
-        return view('greenhouse.index', compact('greenhouses'));
-    }
 
-    // buat form tambah greenhouse
-    public function create()
-    {
-        // generate id
+        // generate id baru
         $last = ModelGreenhouse::orderBy('id_greenhouse', 'desc')->first();
-        if($last){
+        if ($last) {
             $num = intval(substr($last->id_greenhouse, 2)) + 1;
             $newid = 'GH' . str_pad($num, 4, '0', STR_PAD_LEFT);
         } else {
             $newid = 'GH0001';
         }
-        return view('greenhouse.create', compact('newid'));
+
+        return view('greenhouse.index', compact('greenhouses', 'newid'));
     }
 
+    
     // buat nyimpen greenhouse baru di form tambah
     public function store(Request $request)
     {
@@ -80,14 +77,14 @@ class GHController extends Controller
 
 
     // buat nampilin detail greenhouse
-public function show($id_greenhouse)
-{
-    $greenhouse = ModelGreenhouse::with(['LogQC' => function ($query) {
-        $query->orderBy('tanggal_qc', 'desc'); // atau 'created_at' kalau kamu mau urut berdasarkan waktu input
-    }])->findOrFail($id_greenhouse);
+public function DetailGreenhouse($id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::with(['LogQC' => function ($query) {
+            $query->orderBy('tanggal_qc', 'desc'); // atau 'created_at' kalau kamu mau urut berdasarkan waktu input
+        }])->findOrFail($id_greenhouse);
 
-    return view('greenhouse.detailgh', compact('greenhouse'));
-}
+        return view('greenhouse.detailgh', compact('greenhouse'));
+    }
 
     // buat form update monitoring GH
     public function FormUpdateMonitoring($id_greenhouse)

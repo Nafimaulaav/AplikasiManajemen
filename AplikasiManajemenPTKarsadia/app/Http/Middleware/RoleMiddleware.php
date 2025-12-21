@@ -20,7 +20,7 @@ class RoleMiddleware
 
         //kalau belum login
         if (!$user){
-            return redirect('login')->with('error', 'Silahkan login terlebih dahulu');
+            return redirect()->route('login')->with('error', 'Silahkan login terlebih dahulu');
         }
 
         //mengecek role

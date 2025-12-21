@@ -63,6 +63,20 @@ class ModelGreenhouse extends Model
             }
         });
     }
+    // buat generate id greenhouse
+    // private static function generateId()
+    // {
+    //     // ambil ID terbesar
+    //     $last = self::orderBy('id_greenhouse', 'desc')->first();
+    //     if (!$last) {
+    //         return 'GH0001';
+    //     }
+    //     // ambil angka setelah GH
+    //     $num = intval(substr($last->id_greenhouse, 2)) + 1;
+    //     // format ulang GH + nomor
+    //     return 'GH' . str_pad($num, 4, '0', STR_PAD_LEFT);
+    // }
+    
 
 }
 
