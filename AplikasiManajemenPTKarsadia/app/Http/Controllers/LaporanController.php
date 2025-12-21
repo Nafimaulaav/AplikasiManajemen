@@ -61,4 +61,14 @@ class LaporanController extends Controller
             ->route('laporan.index')
             ->with('success', 'Laporan harian berhasil diupdate');
     }
+
+    // buat hapus laporan harian
+    public function destroy($id_laporanharian)
+    {
+        $laporan = ModelLaporanHarian::findOrFail($id_laporanharian);
+        $laporan->delete();
+        return redirect()
+            ->route('laporan.index')
+            ->with('success', 'Laporan harian berhasil dihapus');
+    }
 }
