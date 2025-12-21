@@ -48,6 +48,11 @@ class LoginController extends Controller
         }
     }
 
+    public function profile(){
+        $user = Auth::user();
+        return view('profile.index', compact('user'));
+    }
+
     // buat logout
     public function logout(Request $request)
     {
