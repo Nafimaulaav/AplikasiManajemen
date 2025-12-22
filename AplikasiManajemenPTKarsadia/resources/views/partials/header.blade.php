@@ -8,7 +8,7 @@
 
     @auth
     <div class="header-kanan">
-        <img src="{{ asset('gambar/icon/user.png') }}" class="icon-user" alt="User">
+        <i class="bi bi-person-circle"></i>
         <a href="{{ route('profile') }}" class="user-email">{{ Auth::user()->username ?? 'users'}}</a>
     </div>
     @endauth

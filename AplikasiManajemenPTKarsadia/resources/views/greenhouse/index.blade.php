@@ -3,23 +3,6 @@
 @section('content')
 
 <div class="container">
-    @if (session('success'))
-        <div id="success-alert" class="alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-            <div>
-                <strong>Berhasil!</strong>{{ session('success') }}
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-    
     <div class="header-gh d-flex justify-content-between align-items-center mb-4">
         <h1 class="judulgh">Rumah Kaca</h1>
         @if (Auth::user()->role === 'admin' || Auth::user()->role === 'petugas')
@@ -247,18 +230,7 @@
             formHapus.action = '/greenhouse/hapus/' + id;
         });
     });
-
-    setTimeout(function(){
-        let alert =document.getElementById('success-alert');
-        if(alert) {
-            alert.classList.remove('show');
-            alert.classList.add('fade');
-            setTimeout(() => alert.remove(), 500);
-        }
-    }, 3000);
 });
-
-
 
 </script>
 

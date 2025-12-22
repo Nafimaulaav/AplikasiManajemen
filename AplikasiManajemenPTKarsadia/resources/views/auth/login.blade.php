@@ -7,6 +7,12 @@
         <div class="login-container">
             <h2>Masuk</h2>
 
+            @error('username')
+            <div class="error">
+                {{ $message }}
+            </div>
+            @enderror
+
             <div id="errorBox" class="error" style="display: none;"></div>
             <form id="formLogin" action="{{ url('login') }}" method="POST">
                 @csrf
