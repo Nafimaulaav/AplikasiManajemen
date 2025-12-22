@@ -10,7 +10,8 @@ class LaporanController extends Controller
     // buat nampilin halaman laporan
     public function index()
     {
-        return view('laporan.index');
+        $dataLaporan = ModelLaporanHarian::latest()->get();
+        return view('laporan.index', compact('dataLaporan'));
     }
 
     // buat nampilin form tambah laporan harian
@@ -26,7 +27,7 @@ class LaporanController extends Controller
         $validated = $request->validate([
             'judul_laporan' => 'required|string|max:100',
             'tanggal_laporan' => 'required|date',
-            'aktivitas' => 'required|string',
+            'aktivitas' => 'required|in:Penanaman,Perawatan,Pembersihan',
             'nama_petugas' => 'required|string|max:50',
             'gambar_laporan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'catatan' => 'nullable|string',
@@ -50,7 +51,7 @@ class LaporanController extends Controller
         $validated = $request->validate([
             'judul_laporan' => 'required|string|max:100',
             'tanggal_laporan' => 'required|date',
-            'aktivitas' => 'required|string',
+            'aktivitas' => 'required|in:Penanaman,Perawatan,Pembersihan',
             'nama_petugas' => 'required|string|max:50',
             'catatan' => 'nullable|string',
         ]);

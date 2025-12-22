@@ -1,0 +1,183 @@
+.header-laporan {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.judul-laporan {
+    font-size: 48px;
+    font-weight: 600;
+    font-family: 'Montserrat';
+}
+
+.btn-tambah {
+    display: inline-flex;
+    align-items: center;
+    background-color: #eaa652;
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.btn-tambah i {
+    font-size: 25px;
+}
+
+.card-list-laporan {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.laporan-card {
+    position: relative;
+    background-color: #d9d9d9d9;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card-header-laporan {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.title-laporan {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.card-image-laporan img {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+}
+
+.card-content-laporan {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 24px;
+    font-family: 'Montserrat';
+}
+
+.info-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.info-label {
+    width: 120px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.info-value {
+    flex: 1;
+    font-size: 16px;
+}
+
+.judul-laporan-item {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.tanggal-laporan {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.judul-laporan-item, .tanggal-laporan {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.card-action-laporan {
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.card-action-laporan .btn {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    font-family: 'Montserrat';
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-hapus {
+    background-color: #cd4a4a;
+    color: black;
+}
+
+.edit-btn {
+    background-color: #fff;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.card-body-laporan {
+    display: flex;
+    gap: 45px;
+    align-items: flex-start;
+}
+
+.laporan-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.laporan-card-link:hover .laporan-card {
+    text-decoration: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    transition: 0.2s;
+}
+
+.btn-tambah:hover {
+    background-color: #d18f40;
+    color: black;
+    cursor: pointer;
+    transform: translateY(-2px);
+    transition: 0.2s;
+}
+
+.edit-btn:hover {
+    background-color: #f0f0f0;
+    color: black;
+    cursor: pointer;
+    transform: translateY(-2px);
+    transition: 0.2s;
+}
+
+.btn-hapus:hover {
+    background-color: #b33a3a;
+    color: black;
+    cursor: pointer;
+    transform: translateY(-2px);
+    transition: 0.2s;
+}

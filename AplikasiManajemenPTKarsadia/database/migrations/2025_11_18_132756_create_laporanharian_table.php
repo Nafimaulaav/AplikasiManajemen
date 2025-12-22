@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('laporanharian', function (Blueprint $table) {
+            $table->timestamps(); // created_at & updated_at
             $table->string('id_laporanharian', 10)->primary();
             $table->string('judul_laporan');
             $table->dateTime('tanggal_laporan')->useCurrent();
