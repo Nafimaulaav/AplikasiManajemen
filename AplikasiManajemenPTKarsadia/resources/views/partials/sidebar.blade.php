@@ -6,12 +6,12 @@
             </a>
         </li>
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('greenhouse.index') }}" class="menu-link">
                 <span class="menu-text">Rumah Kaca</span>
             </a>
         </li>
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('laporan.index') }}" class="menu-link">
                 <span class="menu-text">Laporan</span>
             </a>
         </li>
