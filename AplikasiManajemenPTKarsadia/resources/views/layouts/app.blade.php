@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('css/content.css') }}">
     <link rel="stylesheet" href="{{ asset('css/greenhouse.css') }}">
     <link rel="stylesheet" href="{{ asset('css/detailgh.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/laporan.css') }}">
  </head>
  
  <body>
