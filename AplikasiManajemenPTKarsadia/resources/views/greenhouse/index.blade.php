@@ -35,7 +35,7 @@
                             data-bs-toggle="modal" data-bs-target="#modalEditGH">
                         <i class="bi bi-pencil-fill"></i> Ubah
                     </button>
-                    <button type="button" class="btn btn-hapus"
+                    <button type="button" class="btn hapus-btn"
                             data-id="{{ $gh->id_greenhouse }}"
                             data-bs-toggle="modal" data-bs-target="#modalHapusGH">
                         <i class="bi bi-trash-fill"></i> Hapus
@@ -92,7 +92,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="formTambahGH">
+                <form id="formTambahGH" method="POST" action="{{ route('store_greenhouse') }}">
                     @csrf
                     <div class=mb-3>
                         <label>ID Greenhouse</label>
@@ -135,9 +135,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form class="formEditGH">
+                <form id="formEditGH" method="POST">
                     @csrf
-                    @method('PUT')
+                    <!-- @method('PUT') -->
                     <div class="mb-3">
                         <label>ID Greenhouse</label>
                         <input type="text" name="id_greenhouse" id="editID" class="form-control" readonly>
@@ -192,3 +192,46 @@
     </div>
 </div>
 @endsection
+
+<script>
+// Fungsi buat buka dan tutup modal
+    document.addEventListener('DOMContentLoaded', function() {
+    // modal edit
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            const nama = this.getAttribute('data-name');
+            const alamat = this.getAttribute('data-alamat');
+            const status = this.getAttribute('data-status');
+
+            // isi value pada form edit
+            document.getElementById('editID').value = id;
+            document.getElementById('editNama').value = nama;
+            document.getElementById('editAlamat').value = alamat;
+            document.getElementById('editStatus').value = status;
+
+            const formEdit = document.querySelector('#formEditGH');
+            formEdit.action = '/greenhouse/edit/' + id;
+        });
+    });
+
+    // modal hapus
+    const hapusButtons = document.querySelectorAll('.hapus-btn'); // samakan dengan Blade
+    hapusButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            document.getElementById('hapusId').value = id;
+
+            const formHapus = document.querySelector('#formHapusGH');
+            formHapus.action = '/greenhouse/hapus/' + id;
+        });
+    });
+});
+
+</script>
+

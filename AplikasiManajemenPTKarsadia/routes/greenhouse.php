@@ -25,16 +25,11 @@ Route::prefix('greenhouse')->group(function () {
     Route::middleware('role:admin')->group(function(){
         Route::get('/edit/{id_greenhouse}', [GHController::class, 'FormEditGreenhouse'])->name('edit_greenhouse');
         Route::post('/edit/{id_greenhouse}', [GHController::class, 'UpdateGreenhouse'])->name('update_greenhouse');
-        Route::delete('/hapus/{id_greenhouse}', [GHController::class, 'DestroyGreenhouse'])->name('destroy_greenhouse');
-    });
+        Route::delete( '/hapus/{id_greenhouse}', [GHController::class, 'DestroyGreenhouse'])->name('destroy_greenhouse');
     // edit monitor
-    Route::middleware('role:admin')->group(function(){
         Route::get('/monitoring/edit/{id_greenhouse}', [GHController::class, 'FormUpdateMonitoring'])->name('form_update_monitoring');
         Route::post('/monitoring/edit/{id_greenhouse}', [GHController::class, 'updateMonitoring'])->name('update_monitoring');
-    });
-
     //edit spessifikasi
-    Route::middleware('role:admin')->group(function(){
         Route::get('/spesifikasi/edit/{id_greenhouse}', [GHController::class, 'FormUpdateSpesifikasi'])->name('form_update_spesifikasi');
         Route::post('/spesifikasi/edit/{id_greenhouse}', [GHController::class, 'updateSpecs'])->name('update_specs');
     });

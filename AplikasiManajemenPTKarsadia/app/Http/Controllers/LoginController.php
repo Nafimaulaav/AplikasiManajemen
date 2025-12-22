@@ -40,9 +40,9 @@ class LoginController extends Controller
     {
         $user = Auth::user();
         if ($user->role == 'admin') {
-            return redirect('/admin/dashboard');
+            return redirect('/dashboard');
         } elseif ($user->role == 'petugas') {
-            return redirect('/petugas/dashboard');
+            return redirect('/dashboard');
         } else {
             return redirect('/login');
         }
@@ -59,6 +59,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('auth/login');
+        return redirect('/login');
     }
 }

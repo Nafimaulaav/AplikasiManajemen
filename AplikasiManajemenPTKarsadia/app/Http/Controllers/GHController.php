@@ -26,7 +26,7 @@ class GHController extends Controller
 
     
     // buat nyimpen greenhouse baru di form tambah
-    public function store(Request $request)
+    public function StoreGreenhouse(Request $request)
     {
         $validated = $request->validate([
             'id_greenhouse' => 'required|string|max:10',
@@ -137,5 +137,13 @@ public function DetailGreenhouse($id_greenhouse)
         return redirect()
             ->route('detail_greenhouse', $id_greenhouse)
             ->with('success', 'Spesifikasi greenhouse berhasil diperbarui');
+    }
+
+    public function DestroyGreenhouse($id_greenhouse){
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+        $greenhouse->delete();
+        return redirect()
+        ->route('greenhouse.index')
+        ->with('success', 'Greenhouse Berhasil Dihapus');
     }
 }

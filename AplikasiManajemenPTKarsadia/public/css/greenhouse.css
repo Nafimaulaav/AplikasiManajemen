@@ -40,9 +40,9 @@
     background-color: #d9d9d9d9;
     border-radius: 12px;
     overflow: hidden;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 16px;
 }
 
 .card-header-gh {
@@ -59,12 +59,13 @@
 }
 
 .card-image-gh img {
-    width: 300px;
+    width: 200px;
     height: auto;
     object-fit: cover;
 }
 
 .card-conten-gh {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -156,7 +157,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn-hapus {
+.hapus-btn {
     background-color: #cd4a4a;
     color: black;
 }
@@ -169,8 +170,9 @@
 
 .card-body-gh {
     display: flex;
-    gap: 45px;
-    align-items: flex-start;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
 .gh-card-link {
@@ -203,10 +205,24 @@
     transition: 0.2s;
 }
 
-.btn-hapus:hover {
+.hapus-btn:hover {
     background-color: #b33a3a;
     color: black;
     cursor: pointer;
     transform: translateY(-2px);
     transition: 0.2s;
+}
+
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 100px);
+}
+
+.modal-content{
+    margin: auto;
+    max-width: 700px;
+    width: 100%;
+    border-radius: 10px;
 }
