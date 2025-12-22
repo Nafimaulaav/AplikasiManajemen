@@ -40,12 +40,17 @@ class GHController extends Controller
             'id_greenhouse' => $validated['id_greenhouse'],
             'nama_greenhouse' => $validated['nama_greenhouse'],
             'alamat_greenhouse' => $validated['alamat_greenhouse'],
+            
             'status_greenhouse' => $validated['status_greenhouse'],
         ]);
 
         if ($request->hasFile('gambar_greenhouse')) {
-            $imagePath = $request->file('gambar_greenhouse')->store('greenhouse_images', 'public');
-            $greenhouse->gambar_greenhouse = $imagePath;
+            $file = $request->file('gambar_greenhouse');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->move(public_path('images'), $filename);
+
+            $greenhouse->gambar_greenhouse = 'images/' . $filename;
             $greenhouse->save();
         }
 
@@ -69,7 +74,17 @@ class GHController extends Controller
             'nama_greenhouse' => 'required|string|max:100',
             'alamat_greenhouse' => 'required|string|max:255',
             'status_greenhouse' => 'required|in:Aktif,Tidak Aktif,Perbaikan',
+            'gambar_greenhouse' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
+
+        if($request->hasFile('gambar_greenhouse')){
+            $file = $request->file('gambar_greenhouse');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->move(public_path('images'), $filename);
+
+           $validated['gambar_greenhouse'] = 'images/' . $filename;
+        }
 
         $greenhouse->update($validated);
         return redirect()->route('greenhouse.index')->with('success', 'Greenhouse berhasil diperbarui');

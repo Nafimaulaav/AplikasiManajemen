@@ -59,8 +59,8 @@
 }
 
 .card-image-gh img {
-    width: 200px;
-    height: auto;
+    width: 150px;
+    height: 150px;
     object-fit: cover;
 }
 

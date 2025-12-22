@@ -82,84 +82,82 @@
                         <i class="bi bi-pencil-fill"></i> Ubah
                     </button>
                     {{-- Modal Edit Laporan --}}
-<div class="modal fade" id="modalEditLaporan" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <form id="formEditLaporan" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        <div class="modal-header">
-          <h5 class="modal-title">Ubah Laporan Harian</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" name="id" id="editId">
-          <div class="mb-3">
-            <label>Judul Laporan</label>
-            <input type="text" name="judul_laporan" id="editJudul" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Tanggal Laporan</label>
-            <input type="date" name="tanggal_laporan" id="editTanggal" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Nama Petugas</label>
-            <input type="text" name="nama_petugas" id="editPetugas" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Aktivitas</label>
-            <select name="aktivitas" id="editAktivitas" class="form-control" required>
-              <option value="Penanaman">Penanaman</option>
-              <option value="Perawatan">Perawatan</option>
-              <option value="Pembersihan">Pembersihan</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label>Catatan</label>
-            <textarea name="catatan" id="editCatatan" class="form-control" rows="3"></textarea>
-          </div>
-          <div class="mb-3">
-            <label>Gambar Baru (Opsional)</label>
-            <input type="file" name="gambar_laporan" class="form-control">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-tambah">Simpan Perubahan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
+                      <div class="modal fade" id="modalEditLaporan" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <form id="formEditLaporan" method="POST" enctype="multipart/form-data">
+                              @csrf
+                              @method('PUT')
+                              <div class="modal-header">
+                                <h5 class="modal-title">Ubah Laporan Harian</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                              </div>
+                              <div class="modal-body">
+                                <input type="hidden" name="id" id="editId">
+                                <div class="mb-3">
+                                  <label>Judul Laporan</label>
+                                  <input type="text" name="judul_laporan" id="editJudul" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                  <label>Tanggal Laporan</label>
+                                  <input type="date" name="tanggal_laporan" id="editTanggal" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                  <label>Nama Petugas</label>
+                                  <input type="text" name="nama_petugas" id="editPetugas" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                  <label>Aktivitas</label>
+                                  <select name="aktivitas" id="editAktivitas" class="form-control" required>
+                                    <option value="Penanaman">Penanaman</option>
+                                    <option value="Perawatan">Perawatan</option>
+                                    <option value="Pembersihan">Pembersihan</option>
+                                  </select>
+                                </div>
+                                <div class="mb-3">
+                                  <label>Catatan</label>
+                                  <textarea name="catatan" id="editCatatan" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                  <label>Gambar Baru (Opsional)</label>
+                                  <input type="file" name="gambar_laporan" class="form-control">
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-tambah">Simpan Perubahan</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
                     <button type="button" class="btn btn-hapus"
                             data-id="{{ $laporan->id }}"
                             data-bs-toggle="modal" data-bs-target="#modalHapusLaporan">
                         <i class="bi bi-trash-fill"></i> Hapus
                     </button>
                     {{-- Modal Hapus Laporan --}}
-<div class="modal fade" id="modalHapusLaporan" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="formHapusLaporan" method="POST">
-        @csrf
-        @method('DELETE')
-        <div class="modal-header">
-          <h5 class="modal-title">Hapus Laporan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          Yakin ingin menghapus laporan ini?
-          <input type="hidden" name="id" id="hapusId">
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-hapus">Hapus</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
+                  <div class="modal fade" id="modalHapusLaporan" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <form id="formHapusLaporan" method="POST">
+                          @csrf
+                          @method('DELETE')
+                          <div class="modal-header">
+                            <h5 class="modal-title">Hapus Laporan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          </div>
+                          <div class="modal-body">
+                            Yakin ingin menghapus laporan ini?
+                            <input type="hidden" name="id" id="hapusId">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-hapus">Hapus</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 @endif
             </div>
