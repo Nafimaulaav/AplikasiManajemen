@@ -5,6 +5,10 @@
 <div class="container">
     <div class="header-gh d-flex justify-content-between align-items-center mb-4">
         <h1 class="judulgh">Laporan Pendapatan</h1>
+
+        <a href="{{ route('transaksi.create') }}" class="btn btn-primary">
+            + Tambah Transaksi
+        </a>
     </div>
 
     <!-- CARD RINGKASAN -->
@@ -48,6 +52,7 @@
                         <th>Tanggal</th>
                         <th>Nama Petugas</th>
                         <th>Total</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,15 +60,34 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->id_transaksi }}</td>
-                            <td>{{ $item->tanggal_waktu_transaksi }}</td>
+                            <td>
+                                {{ \Carbon\Carbon::parse($item->tanggal_waktu_transaksi)->format('d-m-Y H:i') }}
+                            </td>
                             <td>{{ $item->nama_petugas }}</td>
                             <td>
                                 Rp {{ number_format($item->total_transaksi_harian, 0, ',', '.') }}
                             </td>
+                            <td class="text-center">
+                                <a href="{{ route('transaksi.edit', $item->id_transaksi) }}"
+                                   class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+
+                                <form action="{{ route('transaksi.destroy', $item->id_transaksi) }}"
+                                      method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Yakin hapus transaksi ini?')">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">
+                            <td colspan="6" class="text-center">
                                 Belum ada data transaksi
                             </td>
                         </tr>
