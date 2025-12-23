@@ -17,12 +17,15 @@ Route::prefix('laporan')->group(function () {
 
     // ngedit laporan harian
     Route::middleware('role:admin,petugas')->group(function(){
+        Route::get('/edit/{id_laporanharian}', [LaporanController::class, 'formUpdateLaporan'])->name('laporan.edit');
         Route::post('/edit/{id_laporanharian}', [LaporanController::class, 'update'])->name('laporan.update');
     });
 
 });
 
-// buat laporan harian khusus admin
-Route::middleware('role:admin')->group(function(){
-    Route::delete('/laporan/hapus/{id_laporanharian}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
+// buat laporan harian khusus admin (hapus)
+Route::prefix('laporan')->middleware('role:admin')->group(function() {
+    Route::middleware('role:admin')->group(function(){
+        Route::delete('/hapus/{id_laporanharian}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
+    });
 });
