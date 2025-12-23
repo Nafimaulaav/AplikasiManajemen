@@ -24,7 +24,10 @@
 
                 <div class="form-group">
                     <label>Kata Sandi</label>
-                    <input type="password" name="password" placeholder="Masukkan password" required>
+                    <div class="password-wrapper">
+                        <input type="password" name="password" id="password" placeholder="Masukkan password" required>
+                        <i id="togglePassword" class="bi bi-eye-slash-fill" onclick="togglePassword()"></i>  
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-login">Masuk</button>
@@ -33,3 +36,20 @@
     </div>  
 </div>
 @endsection
+
+<script>
+    function togglePassword(){
+        const password = document.getElementById('password');
+        const icon = document.getElementById('togglePassword');
+
+        if (password.type === 'password'){
+            password.type = 'text';
+            icon.classList.remove('bi-eye-slash-fill');
+            icon.classList.add('bi-eye-fill');
+        }else {
+            password.type ='password';
+            icon.classList.remove('bi-eye-fill');
+            icon.classList.add('bi-eye-slash-fill');
+        }
+    }
+</script>

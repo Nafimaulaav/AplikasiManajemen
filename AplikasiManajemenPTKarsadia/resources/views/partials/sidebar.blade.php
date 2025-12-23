@@ -25,7 +25,7 @@
             </a>
         </li>
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('pendapatan') }}" class="menu-link">
                 <i class="bi bi-bar-chart-fill"></i>
                 <span class="menu-text">Pendapatan</span>
             </a>

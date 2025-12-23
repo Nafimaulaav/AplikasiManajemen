@@ -107,11 +107,14 @@
                     </div>
                     <div class="mb-3">
                         <label>Status</label>
-                        <select name="status_greenhouse" class="form-control">
+                        <div class="select-wrapper">
+                        <select name="status_greenhouse" id="tambahStatus" class="form-control">
                             <option value="Aktif">Aktif</option>
                             <option value="Tidak Aktif">Tidak Aktif</option>
                             <option value="Perbaikan">Perbaikan</option>
                         </select>
+                        <i id="selectArrow" class="bi bi-chevron-down select-icon"></i>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label>Gambar</label>
@@ -151,11 +154,14 @@
                     </div>
                     <div class="mb-3">
                         <label>Status</label>
+                        <div class="select-wrapper">
                         <select name="status_greenhouse" id="editStatus" class="form-control">
                             <option value="Aktif">Aktif</option>
                             <option value="Tidak Aktif">Tidak Aktif</option>
                             <option value="Perbaikan">Perbaikan</option>
                         </select>
+                        <i class="bi bi-chevron-down select-icon"></i>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label>Gambar</label>
@@ -230,6 +236,21 @@
             formHapus.action = '/greenhouse/hapus/' + id;
         });
     });
+
+    document.querySelectorAll('.select-wrapper').forEach(wrapper => {
+        const select = wrapper.querySelector('select');
+        const arrow = wrapper.querySelector('.select-icon');
+
+        select.addEventListener('mousedown', () => {
+            arrow.classList.add('rotate');
+        });
+        select.addEventListener('change', () => {
+            arrow.classList.remove('rotate');
+        });
+        select.addEventListener('blur', () => {
+            arrow.classList.remove('rotate');
+        });
+    })
 });
 
 </script>
