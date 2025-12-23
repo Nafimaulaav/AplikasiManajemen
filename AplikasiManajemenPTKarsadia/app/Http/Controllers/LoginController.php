@@ -22,7 +22,15 @@ class LoginController extends Controller
         $request->validate([
             'username' => 'required',
             'password' => 'required'
-        ]);
+        ],
+        [
+            'username.reqired' => 'Username harus diisi',
+            'password.reqired' => 'Password harus diisi'
+        ]
+        
+    
+    
+    );
 
         // cek email dan password berhasil
         if (Auth::attempt($request->only('username','password'))) {

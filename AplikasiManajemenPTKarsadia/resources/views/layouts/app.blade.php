@@ -22,6 +22,25 @@
     <link rel="stylesheet" href="{{ asset('css/detailgh.css') }}">
     <link rel="stylesheet" href="{{ asset('css/laporan.css') }}">
  </head>
+
+ @if (session('success'))
+ <div class="modal fade" id="successModal" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center">
+         <div class="modal-body p-4">
+            <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
+            <h4 class="fw-bold">Berhasil</h4>
+            <p>{{ session('success') }}</p>
+            <button class="btn btn-success mt-3" data-bs-dismiss="modal">
+               OK
+            </button>
+         </div>
+      </div>
+   </div>
+
+ </div>
+ 
+ @endif
  
  <body>
    <div class="layout-wrapper">
@@ -36,4 +55,14 @@
       </div>
    </div>
  </body>
+ <script>
+   document.addEventListener('DOMContentLoaded', function() {
+      const successModal = document.getElementById('successModal');
+      if(successModal){
+         const modal = new bootstrap.Modal(successModal);
+         modal.show();
+      }
+
+   });
+ </script>
  </html>

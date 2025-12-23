@@ -3,23 +3,6 @@
 @section('content')
 
 <div class="container">
-    @if (session('success'))
-        <div id="success-alert" class="alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-            <div>
-                <strong>Berhasil!</strong>{{ session('success') }}
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-    
     <div class="header-gh d-flex justify-content-between align-items-center mb-4">
         <h1 class="judulgh">Rumah Kaca</h1>
         @if (Auth::user()->role === 'admin' || Auth::user()->role === 'petugas')
@@ -124,11 +107,14 @@
                     </div>
                     <div class="mb-3">
                         <label>Status</label>
-                        <select name="status_greenhouse" class="form-control">
+                        <div class="select-wrapper">
+                        <select name="status_greenhouse" id="tambahStatus" class="form-control">
                             <option value="Aktif">Aktif</option>
                             <option value="Tidak Aktif">Tidak Aktif</option>
                             <option value="Perbaikan">Perbaikan</option>
                         </select>
+                        <i id="selectArrow" class="bi bi-chevron-down select-icon"></i>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label>Gambar</label>
@@ -168,11 +154,14 @@
                     </div>
                     <div class="mb-3">
                         <label>Status</label>
+                        <div class="select-wrapper">
                         <select name="status_greenhouse" id="editStatus" class="form-control">
                             <option value="Aktif">Aktif</option>
                             <option value="Tidak Aktif">Tidak Aktif</option>
                             <option value="Perbaikan">Perbaikan</option>
                         </select>
+                        <i class="bi bi-chevron-down select-icon"></i>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label>Gambar</label>
@@ -248,17 +237,21 @@
         });
     });
 
-    setTimeout(function(){
-        let alert =document.getElementById('success-alert');
-        if(alert) {
-            alert.classList.remove('show');
-            alert.classList.add('fade');
-            setTimeout(() => alert.remove(), 500);
-        }
-    }, 3000);
+    document.querySelectorAll('.select-wrapper').forEach(wrapper => {
+        const select = wrapper.querySelector('select');
+        const arrow = wrapper.querySelector('.select-icon');
+
+        select.addEventListener('mousedown', () => {
+            arrow.classList.add('rotate');
+        });
+        select.addEventListener('change', () => {
+            arrow.classList.remove('rotate');
+        });
+        select.addEventListener('blur', () => {
+            arrow.classList.remove('rotate');
+        });
+    })
 });
-
-
 
 </script>
 
