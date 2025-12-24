@@ -33,6 +33,7 @@
         <li class="menu-item">
             <a href="#" class="menu-link">
                 <i class="bi bi-chat-right-fill"></i>
+            <a href="{{ route('riwayat.index') }}" class="menu-link">
                 <span class="menu-text">Riwayat</span>
             </a>
         </li>
