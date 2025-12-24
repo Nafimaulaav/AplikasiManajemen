@@ -6,24 +6,18 @@ use App\Helpers\RiwayatHelper;
 use Illuminate\Http\Request;
 use App\Models\ModelLaporanHarian;
 use App\Models\ModelGreenhouse;
-<<<<<<< HEAD
-=======
 
->>>>>>> nyobaRiwayat
 
 class LaporanController extends Controller
 {
     // buat nampilin halaman laporan
     public function index()
     {
-<<<<<<< HEAD
         $dataLaporan = ModelLaporanHarian::with('greenhouse')->orderBy('tanggal_laporan', 'desc')->get();
         $greenhouse = ModelGreenhouse::all();
 
-=======
-        $dataLaporan = ModelLaporanHarian::latest()->get();
-        $greenhouse = ModelGreenhouse::all();
->>>>>>> nyobaRiwayat
+        // $dataLaporan = ModelLaporanHarian::latest()->get();
+        // $greenhouse = ModelGreenhouse::all();
         return view('laporan.index', compact('dataLaporan', 'greenhouse'));
     }
 
