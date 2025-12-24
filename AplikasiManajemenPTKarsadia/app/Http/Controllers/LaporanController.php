@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\RiwayatHelper;
 use Illuminate\Http\Request;
 use App\Models\ModelLaporanHarian;
+use App\Models\ModelGreenhouse;
+
 
 class LaporanController extends Controller
 {
@@ -11,7 +14,8 @@ class LaporanController extends Controller
     public function index()
     {
         $dataLaporan = ModelLaporanHarian::latest()->get();
-        return view('laporan.index', compact('dataLaporan'));
+        $greenhouse = ModelGreenhouse::all();
+        return view('laporan.index', compact('dataLaporan', 'greenhouse'));
     }
 
     // buat nampilin form tambah laporan harian
@@ -37,6 +41,14 @@ class LaporanController extends Controller
         // simpen data laporan harian
         $laporan = ModelLaporanHarian::create($validated);
 
+
+        // buat record tambah ke riwayat
+        RiwayatHelper::catat(
+            'Tambah',
+            'Laporan',
+            'Menambahkan laporan baru: ' . $laporan->judul_laporan
+        );
+
         return redirect()
             ->route('laporan.index')
             ->with('success', 'Laporan harian berhasil ditambahkan');
@@ -58,6 +70,13 @@ class LaporanController extends Controller
 
         $laporan->update($validated);
 
+        // buat record ubah ke riwayat
+        RiwayatHelper::catat(
+            'Ubah',
+            'Laporan',
+            'Mengubah data laporan: ' . $laporan->judul_laporan
+        );
+
         return redirect()
             ->route('laporan.index')
             ->with('success', 'Laporan harian berhasil diupdate');
@@ -67,7 +86,20 @@ class LaporanController extends Controller
     public function destroy($id_laporanharian)
     {
         $laporan = ModelLaporanHarian::findOrFail($id_laporanharian);
+        
+        // buat nyimpen snapshot
+        $judulLaporan = $laporan->judul_laporan ?? 'Laporan Harian';
+        $tanggalLaporan = $laporan->tanggal_laporan;
+
+        // hapus
         $laporan->delete();
+
+        // buat record hapus ke riwayat
+        RiwayatHelper::catat(
+            'Hapus',
+            'Laporan',
+            'Menghapus laporan "' . $judulLaporan . '" pada ' . $tanggalLaporan
+        );
         return redirect()
             ->route('laporan.index')
             ->with('success', 'Laporan harian berhasil dihapus');

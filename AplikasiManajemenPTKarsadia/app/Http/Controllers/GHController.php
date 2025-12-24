@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ModelGreenhouse;
+use App\Helpers\RiwayatHelper;
 
 class GHController extends Controller
 {
@@ -53,6 +54,13 @@ class GHController extends Controller
             $greenhouse->gambar_greenhouse = 'images/' . $filename;
             $greenhouse->save();
         }
+
+        // buat record tambah ke riwayat
+        RiwayatHelper::catat(
+            'Tambah',
+            'Greenhouse',
+            'Menambahkan greenhouse baru: ' . $greenhouse->nama_greenhouse
+        );
 
         return redirect()
             ->route('greenhouse.index')
@@ -161,4 +169,5 @@ public function DetailGreenhouse($id_greenhouse)
         ->route('greenhouse.index')
         ->with('success', 'Greenhouse Berhasil Dihapus');
     }
+
 }
