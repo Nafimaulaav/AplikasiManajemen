@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ModelGreenhouse;
+use App\Helpers\RiwayatHelper;
 
 class GHController extends Controller
 {
@@ -11,19 +12,25 @@ class GHController extends Controller
     public function index()
     {
         $greenhouses = ModelGreenhouse::all();
-        return view('greenhouse.index', compact('greenhouses'));
+
+        // generate id baru
+        $last = ModelGreenhouse::orderBy('id_greenhouse', 'desc')->first();
+        if ($last) {
+            $num = intval(substr($last->id_greenhouse, 2)) + 1;
+            $newid = 'GH' . str_pad($num, 4, '0', STR_PAD_LEFT);
+        } else {
+            $newid = 'GH0001';
+        }
+
+        return view('greenhouse.index', compact('greenhouses', 'newid'));
     }
 
-    // buat form tambah greenhouse
-    public function create()
-    {
-        return view('greenhouse.create');
-    }
-
+    
     // buat nyimpen greenhouse baru di form tambah
-    public function store(Request $request)
+    public function StoreGreenhouse(Request $request)
     {
         $validated = $request->validate([
+            'id_greenhouse' => 'required|string|max:10',
             'nama_greenhouse' => 'required|string|max:100',
             'alamat_greenhouse' => 'required|string|max:255',
             'gambar_greenhouse' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
@@ -31,16 +38,29 @@ class GHController extends Controller
         ]);
 
         $greenhouse = ModelGreenhouse::create([
+            'id_greenhouse' => $validated['id_greenhouse'],
             'nama_greenhouse' => $validated['nama_greenhouse'],
             'alamat_greenhouse' => $validated['alamat_greenhouse'],
+            
             'status_greenhouse' => $validated['status_greenhouse'],
         ]);
 
         if ($request->hasFile('gambar_greenhouse')) {
-            $imagePath = $request->file('gambar_greenhouse')->store('greenhouse_images', 'public');
-            $greenhouse->gambar_greenhouse = $imagePath;
+            $file = $request->file('gambar_greenhouse');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->move(public_path('images'), $filename);
+
+            $greenhouse->gambar_greenhouse = 'images/' . $filename;
             $greenhouse->save();
         }
+
+        // buat record tambah ke riwayat
+        RiwayatHelper::catat(
+            'Tambah',
+            'Greenhouse',
+            'Menambahkan greenhouse baru: ' . $greenhouse->nama_greenhouse
+        );
 
         return redirect()
             ->route('greenhouse.index')
@@ -62,7 +82,17 @@ class GHController extends Controller
             'nama_greenhouse' => 'required|string|max:100',
             'alamat_greenhouse' => 'required|string|max:255',
             'status_greenhouse' => 'required|in:Aktif,Tidak Aktif,Perbaikan',
+            'gambar_greenhouse' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
+
+        if($request->hasFile('gambar_greenhouse')){
+            $file = $request->file('gambar_greenhouse');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->move(public_path('images'), $filename);
+
+           $validated['gambar_greenhouse'] = 'images/' . $filename;
+        }
 
         $greenhouse->update($validated);
         return redirect()->route('greenhouse.index')->with('success', 'Greenhouse berhasil diperbarui');
@@ -70,12 +100,20 @@ class GHController extends Controller
 
 
     // buat nampilin detail greenhouse
-    public function show($id_greenhouse)
+public function DetailGreenhouse($id_greenhouse)
     {
-        $greenhouse = ModelGreenhouse::with('LogQC')
-            ->where('id_greenhouse', $id_greenhouse)
-            ->firstOrFail();
-        return view('greenhouse.detailgh', compact('greenhouse')); // gw ngubah greenhouse.show jadi greenhouse.detailgh
+        $greenhouse = ModelGreenhouse::with(['LogQC' => function ($query) {
+            $query->orderBy('tanggal_qc', 'desc'); // atau 'created_at' kalau kamu mau urut berdasarkan waktu input
+        }])->findOrFail($id_greenhouse);
+
+        return view('greenhouse.detailgh', compact('greenhouse'));
+    }
+
+    // buat form update monitoring GH
+    public function FormUpdateMonitoring($id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+        return view('greenhouse.detailgh', compact('greenhouse'));
     }
 
     // buat update monitoring GH
@@ -98,6 +136,14 @@ class GHController extends Controller
             ->with('success', 'Monitoring greenhouse berhasil diperbarui');
     }
 
+
+    // buat form update spek GH
+    public function FormUpdateSpesifikasi($id_greenhouse)
+    {
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+        return view('update_spesifikasi', compact('greenhouse'));
+    }
+
     // buat update spek GH
     public function updateSpecs(Request $request, $id_greenhouse)
     {
@@ -112,7 +158,16 @@ class GHController extends Controller
         $greenhouse->update($validated);
 
         return redirect()
-            ->route('greenhouse.show', $id_greenhouse)
+            ->route('detail_greenhouse', $id_greenhouse)
             ->with('success', 'Spesifikasi greenhouse berhasil diperbarui');
     }
+
+    public function DestroyGreenhouse($id_greenhouse){
+        $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);
+        $greenhouse->delete();
+        return redirect()
+        ->route('greenhouse.index')
+        ->with('success', 'Greenhouse Berhasil Dihapus');
+    }
+
 }

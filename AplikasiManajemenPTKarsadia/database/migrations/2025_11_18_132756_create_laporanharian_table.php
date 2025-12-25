@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('laporanharian', function (Blueprint $table) {
+            $table->timestamps(); // created_at & updated_at
             $table->string('id_laporanharian', 10)->primary();
             $table->string('judul_laporan');
             $table->dateTime('tanggal_laporan')->useCurrent();
             $table->enum('aktivitas', ['Perawatan','Penanaman','Pembersihan']);
             $table->string('nama_petugas', 255);
-            $table->string('gambar_laporan');
+            $table->string('gambar_laporan')->nullable();
             $table->string('catatan', 255);
 
 

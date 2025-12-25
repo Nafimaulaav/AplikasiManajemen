@@ -22,7 +22,15 @@ class LoginController extends Controller
         $request->validate([
             'username' => 'required',
             'password' => 'required'
-        ]);
+        ],
+        [
+            'username.reqired' => 'Username harus diisi',
+            'password.reqired' => 'Password harus diisi'
+        ]
+        
+    
+    
+    );
 
         // cek email dan password berhasil
         if (Auth::attempt($request->only('username','password'))) {
@@ -40,12 +48,17 @@ class LoginController extends Controller
     {
         $user = Auth::user();
         if ($user->role == 'admin') {
-            return redirect('/admin/dashboard');
+            return redirect('/dashboard');
         } elseif ($user->role == 'petugas') {
-            return redirect('/petugas/dashboard');
+            return redirect('/dashboard');
         } else {
             return redirect('/login');
         }
+    }
+
+    public function profile(){
+        $user = Auth::user();
+        return view('profile.index', compact('user'));
     }
 
     // buat logout
@@ -54,6 +67,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('auth/login');
+        return redirect('/login');
     }
 }

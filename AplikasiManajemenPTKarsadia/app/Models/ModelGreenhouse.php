@@ -63,8 +63,7 @@ class ModelGreenhouse extends Model
             }
         });
     }
-
-    // buat generate id greenhouse
+    //buat generate id greenhouse
     private static function generateId()
     {
         // ambil ID terbesar
@@ -77,6 +76,7 @@ class ModelGreenhouse extends Model
         // format ulang GH + nomor
         return 'GH' . str_pad($num, 4, '0', STR_PAD_LEFT);
     }
+    
 
 }
 

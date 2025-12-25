@@ -8,7 +8,7 @@ html, body{
     width: 100%;
     height: 100%;
 }
-.header{
+/* .header{
         background: #7ca55d;
         padding: 0 40px;
         display: flex;
@@ -18,7 +18,25 @@ html, body{
         height: 100px;
         color: white;
         font-family: 'Montserrat';
-    }
+    } 
+    BIKINAN NAPI */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: #7ca55d;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-family: 'Montserrat';
+    z-index: 1100; /* lebih tinggi dari sidebar */
+}
+
 .header-kiri{
     display: flex;
     align-items: center;
@@ -31,19 +49,26 @@ html, body{
     gap: 8px;
     color: white;
     }
+.header-kanan .user-email {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+}
 
 .logo-tempat{
     display: flex;
     align-items: center;
-    gap: 45px;
+    gap: 20px; /*45px;*/
     }
 
 .icon-logo{
-    width: 100px;
+    width: auto;
     height: 100px;
     object-fit: contain;
-    
-    }
+    display: block;
+}
+
 .judul-apk{
     font-size: 35px;
     font-weight: 600;
@@ -52,7 +77,7 @@ html, body{
     line-height: 1.2;
     }
 
-.icon-user{
+/* .icon-user{
     width: 22px;
     height: 22px;
     border-radius: 50%;
@@ -64,4 +89,4 @@ html, body{
     font-size: 14px;
     font-weight: 500;
     color: white;
-    }  
+    }   */

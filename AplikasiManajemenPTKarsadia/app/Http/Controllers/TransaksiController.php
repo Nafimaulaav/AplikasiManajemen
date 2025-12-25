@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\ModelTransaksiHarian;
+use Carbon\Carbon;
+
+class TransaksiController extends Controller
+{
+    public function index()
+    {
+        $bulan = Carbon::now()->month;
+        $tahun = Carbon::now()->year;
+
+        $totalPendapatanBulanIni = ModelTransaksiHarian::whereMonth('tanggal_waktu_transaksi', $bulan)
+            ->whereYear('tanggal_waktu_transaksi', $tahun)
+            ->sum('total_transaksi_harian');
+
+        $jumlahPendapatan = ModelTransaksiHarian::whereMonth('tanggal_waktu_transaksi', $bulan)
+            ->whereYear('tanggal_waktu_transaksi', $tahun)
+            ->count();
+
+        $pendapatanTerbaru = ModelTransaksiHarian::latest('tanggal_waktu_transaksi')
+            ->value('total_transaksi_harian') ?? 0;
+
+        $rekapPendapatan = ModelTransaksiHarian::orderBy('tanggal_waktu_transaksi', 'desc')->get();
+
+        return view('transaksi.transaksi', compact(
+            'totalPendapatanBulanIni',
+            'jumlahPendapatan',
+            'pendapatanTerbaru',
+            'rekapPendapatan'
+        ));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'tanggal_waktu_transaksi' => 'required',
+            'total_transaksi_harian' => 'required|numeric',
+            'nama_petugas' => 'required|string'
+        ]);
+
+        ModelTransaksiHarian::create([
+            'tanggal_waktu_transaksi' => $request->tanggal_waktu_transaksi,
+            'total_transaksi_harian' => $request->total_transaksi_harian,
+            'nama_petugas' => $request->nama_petugas,
+        ]);
+
+        return redirect()->route('pendapatan')->with('success', 'Data berhasil disimpan!');
+    }
+
+    // --- TAMBAHKAN DARI SINI ---
+
+    /**
+     * Menampilkan halaman edit (form edit)
+     */
+    public function edit($id)
+    {
+        // Mencari data berdasarkan ID (primary key kamu adalah id_transaksi)
+        $transaksi = ModelTransaksiHarian::findOrFail($id);
+
+        // Melempar data ke view edit.blade.php
+        return view('transaksi.edit', compact('transaksi'));
+    }
+
+    /**
+     * Memproses perubahan data ke database
+     */
+    public function update(Request $request, $id)
+    {
+        // Validasi inputan
+        $request->validate([
+            'tanggal_waktu_transaksi' => 'required',
+            'total_transaksi_harian' => 'required|numeric',
+            'nama_petugas' => 'required|string'
+        ]);
+
+        // Cari datanya
+        $transaksi = ModelTransaksiHarian::findOrFail($id);
+
+        // Update datanya
+        $transaksi->update([
+            'tanggal_waktu_transaksi' => $request->tanggal_waktu_transaksi,
+            'total_transaksi_harian' => $request->total_transaksi_harian,
+            'nama_petugas' => $request->nama_petugas,
+        ]);
+
+        // Balikkan ke halaman utama dengan pesan sukses
+        return redirect()->route('pendapatan')->with('success', 'Data berhasil diperbarui!');
+    }
+
+    // --- SAMPAI SINI ---
+
+    public function destroy($id)
+    {
+        ModelTransaksiHarian::findOrFail($id)->delete();
+        return redirect()->route('pendapatan')->with('success', 'Data berhasil dihapus!');
+    }
+}
