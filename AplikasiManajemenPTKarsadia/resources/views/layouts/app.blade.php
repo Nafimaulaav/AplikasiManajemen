@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/content.css') }}">
     <link rel="stylesheet" href="{{ asset('css/detailgh.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/panen.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/laporan.css') }}">
  </head>
  
  <body>
