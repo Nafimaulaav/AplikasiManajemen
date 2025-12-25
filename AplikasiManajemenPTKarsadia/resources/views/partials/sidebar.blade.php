@@ -19,7 +19,7 @@
             </a>
         </li>
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('panen.index') }}" class="menu-link">
                 <i class="bi bi-basket-fill"></i>
                 <span class="menu-text">Panen</span>
             </a>
