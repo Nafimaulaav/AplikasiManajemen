@@ -59,7 +59,7 @@
                       </div>
                       <div class="mb-3">
                           <label>Gambar (Opsional)</label>
-                          <input type="file" name="gambar_laporan" class="form-control">
+                          <input type="file" name="gambar_laporan" class="form-control" >
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -108,8 +108,6 @@
                 <div class="card-image-gh">
                     @if ($laporan->gambar_laporan)
                         <img src="{{ asset('storage/' . $laporan->gambar_laporan) }}" alt="Gambar Laporan">
-                    @else
-                        <img src="{{ asset('gambar/laporan-default.jpg') }}" alt="Gambar Default">
                     @endif
                 </div>
                 <div class="card-conten-gh">

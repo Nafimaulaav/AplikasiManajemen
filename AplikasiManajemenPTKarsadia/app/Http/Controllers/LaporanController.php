@@ -36,7 +36,7 @@ class LaporanController extends Controller
             'tanggal_laporan' => 'required|date',
             'aktivitas' => 'required|in:Penanaman,Perawatan,Pembersihan',
             'nama_petugas' => 'required|string|max:50',
-            'gambar_laporan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'gambar_laporan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'catatan' => 'nullable|string',
             'id_greenhouse' => 'required|exists:greenhouse,id_greenhouse',
         ]);
@@ -81,8 +81,14 @@ class LaporanController extends Controller
             'tanggal_laporan' => 'required|date',
             'aktivitas' => 'required|in:Penanaman,Perawatan,Pembersihan',
             'nama_petugas' => 'required|string|max:50',
+            'gambar_laporan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'catatan' => 'nullable|string',
         ]);
+
+        if ($request->hasFile('gambar_laporan')) {
+            $validated['gambar_laporan'] =
+                $request->file('gambar_laporan')->store('laporan', 'public');
+        }
 
         $laporan->update($validated);
 
