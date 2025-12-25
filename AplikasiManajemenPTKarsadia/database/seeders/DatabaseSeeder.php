@@ -40,5 +40,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LaporanSeeder::class,
         ]);
+
+        // ni buat seeder riwayat
+        $this->call([
+            RiwayatSeeder::class,
+        ]);
     }
 }

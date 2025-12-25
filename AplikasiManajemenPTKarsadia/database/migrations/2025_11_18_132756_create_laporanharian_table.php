@@ -18,7 +18,7 @@ return new class extends Migration
             $table->dateTime('tanggal_laporan')->useCurrent();
             $table->enum('aktivitas', ['Perawatan','Penanaman','Pembersihan']);
             $table->string('nama_petugas', 255);
-            $table->string('gambar_laporan');
+            $table->string('gambar_laporan')->nullable();
             $table->string('catatan', 255);
 
 

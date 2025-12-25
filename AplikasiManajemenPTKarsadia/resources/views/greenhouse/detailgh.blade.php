@@ -11,7 +11,7 @@
     <div class="gh-detail-container">
         {{-- Session success --}}
         @if(session('success'))
-            <div class="gh-alert-success">{{ session('success') }}</div>
+            <div id="gh-flash-alert" class="gh-alert-success">{{ session('success') }}</div>
         @endif
 
         <div class="gh-main-grid">
@@ -346,6 +346,22 @@
             modal.style.display = "none";
         }
     }
+    // AUTO HIDE FLASH MESSAGE
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertBox = document.getElementById('gh-flash-alert');
+
+        if (alertBox) {
+            setTimeout(() => {
+                alertBox.style.transition = 'opacity 0.5s ease';
+                alertBox.style.opacity = '0';
+
+                setTimeout(() => {
+                    alertBox.remove();
+                }, 500);
+            }, 3000); // 3 detik
+        }
+    });
+    
 </script>
 
 

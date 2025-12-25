@@ -31,7 +31,7 @@
             </a>
         </li>
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('riwayat.index') }}" class="menu-link">
                 <i class="bi bi-chat-right-fill"></i>
                 <span class="menu-text">Riwayat</span>
             </a>
