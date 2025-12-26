@@ -15,7 +15,9 @@ return new class extends Migration
             $table->string('id_panen', 10)->primary();
             $table->date('tanggal_panen');
             $table->integer('jumlah_panen');
-            $table->enum('kualitas', ['Baik', 'Sedang', 'Buruk']);
+            $table->integer('jumlah_grade_a');
+            $table->integer('jumlah_grade_b');
+            $table->integer('jumlah_grade_c');
 
             // foreign key id greenhouse
             $table->string('id_greenhouse', 10);

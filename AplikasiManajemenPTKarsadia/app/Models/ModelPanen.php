@@ -22,7 +22,9 @@ class ModelPanen extends Model
         'id_panen',
         'tanggal_panen',
         'jumlah_panen',
-        'kualitas',
+        'jumlah_grade_a',
+        'jumlah_grade_b',
+        'jumlah_grade_c',
         'id_greenhouse'
     ];
 

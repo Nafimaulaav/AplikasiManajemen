@@ -44,7 +44,7 @@
                         <th>Greenhouse</th>
                         <th>Tanggal</th>
                         <th>Jumlah</th>
-                        <th>Kualitas</th>
+                        <th>Jumlah per Kualitas</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -52,17 +52,15 @@
                     @forelse($panen as $p)
                     <tr>
                         <td>{{ $p->id_panen }}</td>
-                        <td>{{ $p->greenhouse->nama ?? 'N/A' }}</td>
+                        <td>{{ $p->greenhouse->nama_greenhouse ?? 'N/A' }}</td>
                         <td>{{ \Carbon\Carbon::parse($p->tanggal_panen)->format('d-m-Y') }}</td>
                         <td>{{ $p->jumlah_panen }}</td>
                         <td>
-                            @if($p->kualitas == 'Baik')
-                                <span class="badge-baik">{{ $p->kualitas }}</span>
-                            @elseif($p->kualitas == 'Sedang')
-                                <span class="badge-sedang">{{ $p->kualitas }}</span>
-                            @else
-                                <span class="badge-buruk">{{ $p->kualitas }}</span>
-                            @endif
+                            <div class="kualitas-list">
+                                <div>Grade A: {{ $p->jumlah_grade_a }}</div>
+                                <div>Grade B: {{ $p->jumlah_grade_b }}</div>
+                                <div>Grade C: {{ $p->jumlah_grade_c }}</div>
+                            </div>
                         </td>
                         <td class="aksi">
                             <a href="{{ route('edit_panen', $p->id_panen) }}" class="btn-edit">
@@ -119,13 +117,12 @@
             </div>
 
             <div class="form-group">
-                <label>Kualitas *</label>
-                <select name="kualitas" required>
-                    <option value="">-- Pilih --</option>
-                    <option value="Baik">Baik</option>
-                    <option value="Sedang">Sedang</option>
-                    <option value="Buruk">Buruk</option>
-                </select>
+                <label>Jumlah per Kualitas</label>
+                <div class="grade-wrapper">
+                    <input type="number" name="jumlah_grade_a" min="0" required placeholder="Grade A">
+                    <input type="number" name="jumlah_grade_b" min="0" required placeholder="Grade B">
+                    <input type="number" name="jumlah_grade_c" min="0" required placeholder="Grade C">
+                </div>
             </div>
 
             <div class="modal-actions">
@@ -263,8 +260,22 @@ table td {
 table tbody tr:hover {
     background: #f8f9fa;
 }
+.kualitas-list {
+    line-height: 1.6;
+    font-size: 14px;
+}
 
-/* Badge Kualitas */
+/* nambahin css buat jumlah per kualitas */
+.grade-wrapper {
+    display: flex;
+    gap: 10px;
+}
+.grade-wrapper input {
+    flex: 1;
+}
+
+
+/* Badge Kualitas
 .badge-baik {
     background: #d4edda;
     color: #155724;
@@ -290,7 +301,7 @@ table tbody tr:hover {
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
-}
+} */
 
 /* Aksi Buttons */
 .aksi {

@@ -35,8 +35,10 @@ class PanenController extends Controller
     {
         $data = $request->validate([
             'tanggal_panen' => 'required|date',
-            'jumlah_panen'  => 'required|integer|min:1',
-            'kualitas'      => 'required|in:Baik,Sedang,Buruk',
+            'jumlah_panen'  => 'required|integer',
+            'jumlah_grade_a' => 'required|integer',
+            'jumlah_grade_b' => 'required|integer',
+            'jumlah_grade_c' => 'required|integer',
             'id_greenhouse' => 'required|string|max:10|exists:greenhouse,id_greenhouse',
         ]);
 
@@ -59,8 +61,10 @@ class PanenController extends Controller
     {
         $data = $request->validate([
             'tanggal_panen' => 'required|date',
-            'jumlah_panen'  => 'required|integer|min:1',
-            'kualitas'      => 'required|in:Baik,Sedang,Buruk',
+            'jumlah_panen'  => 'required|integer',
+            'jumlah_grade_a' => 'required|integer',
+            'jumlah_grade_b' => 'required|integer',
+            'jumlah_grade_c' => 'required|integer',
             'id_greenhouse' => 'required|string|max:10|exists:greenhouse,id_greenhouse',
         ]);
 
