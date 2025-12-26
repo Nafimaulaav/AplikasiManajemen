@@ -60,7 +60,7 @@
                        required>
             </div>
             
-            <!-- Kualitas -->
+            <!-- Kualitas
             <div class="form-group">
                 <label>Kualitas *</label>
                 <select name="kualitas" required>
@@ -69,6 +69,16 @@
                     <option value="Sedang" {{ old('kualitas', $panen->kualitas ?? '') == 'Sedang' ? 'selected' : '' }}>Sedang</option>
                     <option value="Buruk" {{ old('kualitas', $panen->kualitas ?? '') == 'Buruk' ? 'selected' : '' }}>Buruk</option>
                 </select>
+            </div> -->
+
+            <!-- Jumlah per Kualitas -->
+            <div class="form-group">
+                <label>Jumlah per Kualitas</label>
+                <div class="grade-wrapper">
+                    <input type="number" name="jumlah_grade_a" min="0" required placeholder="Grade A">
+                    <input type="number" name="jumlah_grade_b" min="0" required placeholder="Grade B">
+                    <input type="number" name="jumlah_grade_c" min="0" required placeholder="Grade C">
+                </div>
             </div>
             
             <!-- Tombol -->
