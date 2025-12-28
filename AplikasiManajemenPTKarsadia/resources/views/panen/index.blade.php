@@ -2,514 +2,195 @@
 
 @section('content')
 <div class="panen-main">
-    <!-- Header -->
+
+    <!-- HEADER -->
     <div class="panen-header">
         <h1>Panen</h1>
-        <button class="btn-tambah" onclick="openModal()">+ Tambah</button>
+        <button class="btn-tambah" onclick="showModal('tambahModal')">+ Tambah</button>
     </div>
 
-    <!-- Notifikasi -->
+    <!-- ALERT -->
     @if(session('success'))
-    <div class="alert-success">
-        {{ session('success') }}
-    </div>
+        <div class="alert-success">{{ session('success') }}</div>
     @endif
 
-    @if($errors->any())
-    <div class="alert-error">
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-
-    <!-- Card -->
+    <!-- CARD -->
     <div class="panen-card">
-        <!-- Search -->
+
+        <!-- SEARCH -->
         <div class="panen-action">
-            <div class="search-box">
-                <i class="bi bi-search"></i>
-                <input type="text" placeholder="Telusuri" id="searchInput">
-            </div>
+            <input type="text" id="searchInput" placeholder="Cari data panen...">
         </div>
 
-        <!-- Table -->
-        <div class="table-box">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID Panen</th>
-                        <th>Greenhouse</th>
-                        <th>Tanggal</th>
-                        <th>Jumlah</th>
-                        <th>Jumlah per Kualitas</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    @forelse($panen as $p)
-                    <tr>
-                        <td>{{ $p->id_panen }}</td>
-                        <td>{{ $p->greenhouse->nama_greenhouse ?? 'N/A' }}</td>
-                        <td>{{ \Carbon\Carbon::parse($p->tanggal_panen)->format('d-m-Y') }}</td>
-                        <td>{{ $p->jumlah_panen }}</td>
-                        <td>
-                            <div class="kualitas-list">
-                                <div>Grade A: {{ $p->jumlah_grade_a }}</div>
-                                <div>Grade B: {{ $p->jumlah_grade_b }}</div>
-                                <div>Grade C: {{ $p->jumlah_grade_c }}</div>
-                            </div>
-                        </td>
-                        <td class="aksi">
-                            <a href="{{ route('edit_panen', $p->id_panen) }}" class="btn-edit">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <form action="{{ route('destroy_panen', $p->id_panen) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="return confirm('Hapus data?')">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center">Belum ada data panen</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+        <!-- TABLE -->
+        <table id="panenTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Greenhouse</th>
+                    <th>Tanggal</th>
+                    <th>Jumlah</th>
+                    <th>Grade</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+            @forelse($panen as $p)
+            <tr
+                data-id="{{ $p->id_panen }}"
+                data-tanggal="{{ $p->tanggal_panen }}"
+                data-jumlah="{{ $p->jumlah_panen }}"
+                data-a="{{ $p->jumlah_grade_a }}"
+                data-b="{{ $p->jumlah_grade_b }}"
+                data-c="{{ $p->jumlah_grade_c }}"
+                data-greenhouse="{{ $p->id_greenhouse }}"
+                data-greenhouse-nama="{{ $p->greenhouse->nama_greenhouse ?? '-' }}"
+            >
+                <td>{{ $p->id_panen }}</td>
+                <td>{{ $p->greenhouse->nama_greenhouse ?? '-' }}</td>
+                <td>{{ \Carbon\Carbon::parse($p->tanggal_panen)->format('d-m-Y') }}</td>
+                <td>{{ $p->jumlah_panen }}</td>
+                <td>
+                    A:{{ $p->jumlah_grade_a }} |
+                    B:{{ $p->jumlah_grade_b }} |
+                    C:{{ $p->jumlah_grade_c }}
+                </td>
+                <td class="aksi">
+                    <button class="btn-edit" onclick="editPanen(this)">✏️</button>
+                    <button class="btn-delete" onclick="hapusPanen(this)">🗑️</button>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="6" style="text-align:center;">Belum ada data panen</td>
+            </tr>
+            @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 
 <!-- ================= MODAL TAMBAH ================= -->
-<div class="modal-overlay" id="modal">
-    <div class="modal-card">
-        <h2>Tambah Data Panen</h2>
-
-        <form method="POST" action="{{ route('store_panen') }}">
-            @csrf
-
-            <div class="form-group">
-                <label>Tanggal Panen *</label>
-                <input type="date" name="tanggal_panen" required value="{{ date('Y-m-d') }}">
-            </div>
-
-            <div class="form-group">
-                <label>Greenhouse *</label>
-                <select name="id_greenhouse" required>
-                    <option value="">-- Pilih Greenhouse --</option>
-                    @foreach($greenhouses as $gh)
-                        <option value="{{ $gh->id_greenhouse }}">
-                            {{ $gh->nama ?? $gh->id_greenhouse }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Jumlah Panen *</label>
-                <input type="number" name="jumlah_panen" min="1" required placeholder="Contoh: 100">
-            </div>
-
-            <div class="form-group">
-                <label>Jumlah per Kualitas</label>
-                <div class="grade-wrapper">
-                    <input type="number" name="jumlah_grade_a" min="0" required placeholder="Grade A">
-                    <input type="number" name="jumlah_grade_b" min="0" required placeholder="Grade B">
-                    <input type="number" name="jumlah_grade_c" min="0" required placeholder="Grade C">
-                </div>
-            </div>
-
-            <div class="modal-actions">
-                <button type="submit" class="btn-submit">Simpan</button>
-                <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-            </div>
-        </form>
-    </div>
+<div class="modal-overlay" id="tambahModal">
+<div class="modal-card">
+<h3>Tambah Panen</h3>
+<form method="POST" action="{{ route('store_panen') }}">
+@csrf
+<input type="date" name="tanggal_panen" required>
+<select name="id_greenhouse" required>
+    @foreach($greenhouses as $g)
+        <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
+    @endforeach
+</select>
+<input type="number" name="jumlah_panen" placeholder="Jumlah Panen" required>
+<input type="number" name="jumlah_grade_a" placeholder="Grade A" required>
+<input type="number" name="jumlah_grade_b" placeholder="Grade B" required>
+<input type="number" name="jumlah_grade_c" placeholder="Grade C" required>
+<button type="submit" class="btn-submit">Simpan</button>
+<button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+</form>
+</div>
 </div>
 
-<!-- ================= STYLE ================= -->
+<!-- ================= MODAL EDIT ================= -->
+<div class="modal-overlay" id="editModal">
+<div class="modal-card">
+<h3>Edit Panen</h3>
+<form method="POST" id="formEdit">
+@csrf
+@method('PUT')
+<input id="e_id" readonly>
+<input type="date" name="tanggal_panen" id="e_tanggal" required>
+<select name="id_greenhouse" id="e_greenhouse" required>
+    @foreach($greenhouses as $g)
+        <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
+    @endforeach
+</select>
+<input type="number" name="jumlah_panen" id="e_jumlah" required>
+<input type="number" name="jumlah_grade_a" id="e_a" required>
+<input type="number" name="jumlah_grade_b" id="e_b" required>
+<input type="number" name="jumlah_grade_c" id="e_c" required>
+<button type="submit" class="btn-submit">Update</button>
+<button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+</form>
+</div>
+</div>
+
+<!-- ================= MODAL DELETE ================= -->
+<div class="modal-overlay" id="deleteModal">
+<div class="modal-card">
+<h3>Hapus Data?</h3>
+<p>ID Panen: <b><span id="d_id"></span></b></p>
+<p>Greenhouse: <b><span id="d_gh"></span></b></p>
+<form method="POST" id="formDelete">
+@csrf
+@method('DELETE')
+<button type="submit" class="btn-delete">Hapus</button>
+<button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+</form>
+</div>
+</div>
+
+<!-- ================= CSS ================= -->
 <style>
-/* Main Container */
-.panen-main {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+.panen-main{max-width:1100px;margin:auto;padding:20px}
+.panen-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.btn-tambah{padding:8px 16px;border:none;border-radius:6px;background:#EAA652;color:#fff}
 
-/* Header */
-.panen-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
+.alert-success{background:#d4edda;padding:10px;border-radius:6px;margin-bottom:15px}
 
-.panen-header h1 {
-    color: #2D5443;
-    font-size: 28px;
-    margin: 0;
-}
+.panen-card{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
+.panen-action{padding:12px;border-bottom:1px solid #eee}
+#searchInput{width:250px;padding:8px 12px;border-radius:6px;border:1px solid #ccc}
 
-.btn-tambah {
-    background: #EAA652;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead{background:#f8f9fa}
+th{padding:12px;text-align:left;border-bottom:2px solid #ddd}
+td{padding:12px;border-bottom:1px solid #eee}
+tbody tr:hover{background:#f5f7f8}
 
-.btn-tambah:hover {
-    background: #d89440;
-}
+.aksi{display:flex;gap:6px}
+.btn-edit{background:#4CAF50;color:#fff;border:none;padding:5px 8px;border-radius:4px}
+.btn-delete{background:#dc3545;color:#fff;border:none;padding:5px 8px;border-radius:4px}
 
-/* Alerts */
-.alert-success {
-    background: #d4edda;
-    color: #155724;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    border-left: 4px solid #28a745;
-}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);justify-content:center;align-items:center}
+.modal-card{background:#fff;padding:20px;border-radius:6px;width:100%;max-width:400px}
 
-.alert-error {
-    background: #f8d7da;
-    color: #721c24;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    border-left: 4px solid #dc3545;
-}
-
-.alert-error ul {
-    margin: 5px 0;
-    padding-left: 20px;
-}
-
-/* Card */
-.panen-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-/* Search */
-.panen-action {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.search-box {
-    position: relative;
-    width: 300px;
-}
-
-.search-box i {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #888;
-}
-
-.search-box input {
-    width: 100%;
-    padding: 10px 10px 10px 35px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-/* Table */
-.table-box {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table thead {
-    background: #f8f9fa;
-}
-
-table th {
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #333;
-    border-bottom: 2px solid #dee2e6;
-}
-
-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-table tbody tr:hover {
-    background: #f8f9fa;
-}
-.kualitas-list {
-    line-height: 1.6;
-    font-size: 14px;
-}
-
-/* nambahin css buat jumlah per kualitas */
-.grade-wrapper {
-    display: flex;
-    gap: 10px;
-}
-.grade-wrapper input {
-    flex: 1;
-}
-
-
-/* Badge Kualitas
-.badge-baik {
-    background: #d4edda;
-    color: #155724;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.badge-sedang {
-    background: #fff3cd;
-    color: #856404;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.badge-buruk {
-    background: #f8d7da;
-    color: #721c24;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-} */
-
-/* Aksi Buttons */
-.aksi {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-edit {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.btn-delete {
-    background: #dc3545;
-    color: white;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.btn-edit:hover {
-    background: #45a049;
-}
-
-.btn-delete:hover {
-    background: #c82333;
-}
-
-/* Modal */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-card {
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 450px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-}
-
-.modal-card h2 {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #2D5443;
-    font-size: 24px;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    transition: border 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #EAA652;
-    box-shadow: 0 0 0 2px rgba(234, 166, 82, 0.2);
-}
-
-.modal-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 25px;
-}
-
-.btn-submit {
-    flex: 1;
-    background: #EAA652;
-    border: none;
-    padding: 12px;
-    color: white;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.btn-submit:hover {
-    background: #d89440;
-}
-
-.btn-cancel {
-    flex: 1;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.btn-cancel:hover {
-    background: #5a6268;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .panen-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
-    }
-    
-    .search-box {
-        width: 100%;
-    }
-    
-    .modal-card {
-        margin: 20px;
-        padding: 20px;
-    }
-    
-    .aksi {
-        flex-wrap: wrap;
-    }
-}
+.modal-card input,.modal-card select{width:100%;padding:8px;margin-bottom:8px}
+.btn-submit{background:#EAA652;border:none;color:#fff;padding:8px;border-radius:4px;width:100%}
+.btn-cancel{background:#6c757d;border:none;color:#fff;padding:8px;border-radius:4px;width:100%;margin-top:5px}
 </style>
 
-<!-- ================= SCRIPT ================= -->
+<!-- ================= JS (RINGAN) ================= -->
 <script>
-function openModal() {
-    document.getElementById('modal').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Prevent scrolling
+function showModal(id){document.getElementById(id).style.display='flex'}
+function closeModal(){document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none')}
+
+function editPanen(btn){
+    let tr=btn.closest('tr');
+    e_id.value=tr.dataset.id;
+    e_tanggal.value=tr.dataset.tanggal;
+    e_jumlah.value=tr.dataset.jumlah;
+    e_a.value=tr.dataset.a;
+    e_b.value=tr.dataset.b;
+    e_c.value=tr.dataset.c;
+    e_greenhouse.value=tr.dataset.greenhouse;
+    formEdit.action=`/panen/edit/${tr.dataset.id}`;
+    showModal('editModal');
 }
 
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-    document.body.style.overflow = 'auto'; // Restore scrolling
+function hapusPanen(btn){
+    let tr=btn.closest('tr');
+    d_id.innerText=tr.dataset.id;
+    d_gh.innerText=tr.dataset.greenhouseNama;
+    formDelete.action=`/panen/hapus/${tr.dataset.id}`;
+    showModal('deleteModal');
 }
 
-// Close modal when clicking outside
-document.addEventListener('click', function(event) {
-    const modal = document.getElementById('modal');
-    if (event.target === modal) {
-        closeModal();
-    }
-});
-
-// Close modal with Escape key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeModal();
-    }
-});
-
-// Search functionality
-document.getElementById('searchInput').addEventListener('keyup', function() {
-    const value = this.value.toLowerCase();
-    const rows = document.querySelectorAll('#tableBody tr');
-    
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(value) ? '' : 'none';
-    });
-});
-
-// Confirm delete with custom message
-function confirmDelete(event) {
-    if (!confirm('Apakah Anda yakin ingin menghapus data panen ini?')) {
-        event.preventDefault();
-    }
-}
-
-// Attach confirm to all delete buttons
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.btn-delete');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', confirmDelete);
+document.getElementById('searchInput').addEventListener('keyup',function(){
+    let key=this.value.toLowerCase();
+    document.querySelectorAll('#panenTable tbody tr').forEach(r=>{
+        r.style.display=r.innerText.toLowerCase().includes(key)?'':'none';
     });
 });
 </script>

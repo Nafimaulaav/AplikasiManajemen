@@ -60,16 +60,6 @@
                        required>
             </div>
             
-            <!-- Kualitas
-            <div class="form-group">
-                <label>Kualitas *</label>
-                <select name="kualitas" required>
-                    <option value="">-- Pilih Kualitas --</option>
-                    <option value="Baik" {{ old('kualitas', $panen->kualitas ?? '') == 'Baik' ? 'selected' : '' }}>Baik</option>
-                    <option value="Sedang" {{ old('kualitas', $panen->kualitas ?? '') == 'Sedang' ? 'selected' : '' }}>Sedang</option>
-                    <option value="Buruk" {{ old('kualitas', $panen->kualitas ?? '') == 'Buruk' ? 'selected' : '' }}>Buruk</option>
-                </select>
-            </div> -->
 
             <!-- Jumlah per Kualitas -->
             <div class="form-group">
