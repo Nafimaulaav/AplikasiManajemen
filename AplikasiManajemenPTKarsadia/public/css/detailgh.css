@@ -4,6 +4,22 @@
     background-color: #f5f5f5;
 }
 
+.gh-btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    color: #6c757d;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.gh-btn-back:hover {
+    color: #2D5443;
+    text-decoration: none;
+}
+
 .gh-banner {
     width: 100%;
     height: 250px;
@@ -105,7 +121,7 @@
 
 .gh-modal-content {
     background-color: #fff;
-    margin: 5% auto;
+    margin:8% auto;
     padding: 24px;
     border-radius: 12px;
     width: 100%;
@@ -120,6 +136,21 @@
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 24px;
+}
+.gh-modal-text {
+    font-size: 18px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.gh-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
 }
 
 .gh-form {
@@ -238,6 +269,7 @@
     border-radius: 6px;
     text-decoration: none;
     font-weight: 500;
+    cursor: pointer;
     border: 1px solid #ccc;
 }
 
@@ -246,7 +278,10 @@
     color: #fff;
     padding: 8px 16px;
     border-radius: 6px;
-    border: none;
+    text-decoration: none;
     font-weight: 500;
     cursor: pointer;
+    border: 1px solid #ccc;
 }
+
+

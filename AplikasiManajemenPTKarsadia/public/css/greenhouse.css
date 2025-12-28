@@ -123,7 +123,7 @@
     font-weight: 600;
 }
 
-.status-gh.aktif {
+/* .status-gh.aktif {
     background-color: #4caf50;
     color: black;
 }
@@ -135,7 +135,7 @@
 .status-gh.tidak-aktif{
     background-color: #cd4a4a;
     color: black;
-}
+} */
 
 .card-action-gh {
     /* position: absolute; */
@@ -251,4 +251,18 @@
 
 .select-icon.rotate{
     transform: translateY(-50%) rotate(180deg);
+}
+
+.input-id-gh {
+    background-color: #f1f3f5;
+    color: #6c757d;
+    font-weight: 400;
+    cursor: not-allowed;
+}
+
+.input-id-gh:focus {
+    background-color: #f1f3f5;
+    color: #6c757d;
+    box-shadow: none;
+    border-color: #ced4da;
 }

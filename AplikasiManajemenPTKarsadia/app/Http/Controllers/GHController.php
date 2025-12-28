@@ -41,17 +41,16 @@ class GHController extends Controller
             'id_greenhouse' => $validated['id_greenhouse'],
             'nama_greenhouse' => $validated['nama_greenhouse'],
             'alamat_greenhouse' => $validated['alamat_greenhouse'],
-            
             'status_greenhouse' => $validated['status_greenhouse'],
         ]);
 
         if ($request->hasFile('gambar_greenhouse')) {
             $file = $request->file('gambar_greenhouse');
             $filename = time() . '_' . $file->getClientOriginalName();
-
-            $file->move(public_path('images'), $filename);
-
-            $greenhouse->gambar_greenhouse = 'images/' . $filename;
+            // simpan ke storage/public/greenhouse_images
+            $path = $file->storeAs('greenhouse_images', $filename, 'public');
+            // nyimpen path ke database
+            $greenhouse->gambar_greenhouse = 'storage/' . $path;
             $greenhouse->save();
         }
 

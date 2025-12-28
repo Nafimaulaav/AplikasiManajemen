@@ -93,9 +93,10 @@
             <div class="modal-body">
                 <form id="formTambahGH" method="POST" action="{{ route('store_greenhouse') }} " enctype="multipart/form-data">
                     @csrf
-                    <div class=mb-3>
+                    <div class="mb-3">
                         <label>ID Greenhouse</label>
-                        <input type="text" name="id_greenhouse" class="form-control" value="{{ $newid }}" readonly>
+                        <input type="text" name="id_greenhouse" class="form-control input-id-gh" value="{{ $newid }}" readonly>
+                        <small>ID ini dihasilkan secara otomatis.</small>
                     </div>
                     <div class="mb-3">
                         <label>Nama</label>

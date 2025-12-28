@@ -1,11 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+    {{-- Tombol back to greenhouse index --}}
+    <a href="{{ route('greenhouse.index') }}" class="gh-btn-back">
+        <i class="bi bi-arrow-left"></i> Kembali ke Daftar Greenhouse
+    </a>
+
     {{-- Judul halaman --}}
     <h1 class="gh-title">Rumah Kaca {{ $greenhouse->nama_greenhouse }}</h1>
 
     <div class="gh-banner">
-        <img src="{{ asset('images/greenhouse-banner.jpg') }}" alt="Greenhouse Banner" class="gh-banner-image">
+        @if ($greenhouse->gambar_greenhouse)
+            <img src="{{ asset($greenhouse->gambar_greenhouse) }}" alt="Greenhouse Banner" class="gh-banner-image">
+        @else
+            <img src="{{ asset('images/greenhouse-banner.jpg') }}" alt="Greenhouse Banner" class="gh-banner-image">
+        @endif
     </div>
 
     <div class="gh-detail-container">
@@ -61,9 +70,6 @@
                                 </form>
                             </div>
                         </div>
-
-
-
                     </div>
                     <ul class="gh-list">
                         <li><strong>Waktu Monitoring:</strong> {{ optional($greenhouse->waktu_monitoring)->format('d/m/Y H:i') ?? '-' }}</li>
@@ -203,8 +209,6 @@
                                 </form>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 {{-- List QC Cards --}}
@@ -291,13 +295,29 @@
                                     </div>
 
                                 </a>
-                                <form action="{{ route('destroy_qc', $qc->id_log_qc) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                <!-- <form action="{{ route('destroy_qc', $qc->id_log_qc) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="gh-btn-hapus">
                                         <i class="bi bi-trash-fill"></i> Hapus
                                     </button>
-                                </form>
+                                </form> -->
+                                <a href="javascript:void(0)" onclick="openModal('modalDeleteQC{{ $qc->id_log_qc }}')" class="gh-btn-hapus">
+                                    <i class="bi bi-trash-fill"></i> Hapus
+                                </a>
+                                {{-- Modal Delete QC --}}
+                                <div id="modalDeleteQC{{ $qc->id_log_qc }}" class="gh-modal">
+                                    <div class="gh-modal-content">
+                                        <span class="gh-modal-close" onclick="closeModal('modalDeleteQC{{ $qc->id_log_qc }}')">&times;</span>
+                                        <h2 class="gh-modal-title">Konfirmasi Hapus Log QC</h2>
+                                        <p class="gh-modal-text">Apakah Anda yakin ingin menghapus log QC ini?</p>
+                                        <form action="{{ route('destroy_qc', $qc->id_log_qc) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="gh-btn-hapus gh-btn-center">Ya, Hapus</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -339,13 +359,23 @@
         document.getElementById(id).style.display = 'none';
     }
 
-    // Tutup modal kalau klik di luar kontennya
-    window.onclick = function(event) {
-        const modal = document.getElementById('modalTambahQC');
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    }
+
+    // buat tutup modal dengan tombol x
+    document.querySelectorAll('.gh-modal-close').forEach(function(btn){
+        btn.addEventListener("click", function() {
+            btn.closest('.gh-modal').style.display = 'none';
+        });
+    });
+
+    // // buat tutup modal klo klik di luar konten modal
+    window.addEventListener("click", function(event){
+        document.querySelectorAll('.gh-modal').forEach(function(modal){
+            if(event.target === modal){
+                modal.style.display = 'none';
+            }
+        });
+    });
+
     // AUTO HIDE FLASH MESSAGE
     document.addEventListener('DOMContentLoaded', function () {
         const alertBox = document.getElementById('gh-flash-alert');
@@ -363,5 +393,3 @@
     });
     
 </script>
-
-

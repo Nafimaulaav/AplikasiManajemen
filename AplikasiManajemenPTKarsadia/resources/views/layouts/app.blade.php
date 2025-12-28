@@ -28,8 +28,8 @@
    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content text-center">
          <div class="modal-body p-4">
-            <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
-            <h4 class="fw-bold">Berhasil</h4>
+            <i class="bi bi-check-circle-fill text-success fs-1 mb-6"></i>
+            <h4 class="fw-bold mt-4">Berhasil</h4>
             <p>{{ session('success') }}</p>
             <button class="btn btn-success mt-3" data-bs-dismiss="modal">
                OK
@@ -37,7 +37,6 @@
          </div>
       </div>
    </div>
-
  </div>
  
  @endif
