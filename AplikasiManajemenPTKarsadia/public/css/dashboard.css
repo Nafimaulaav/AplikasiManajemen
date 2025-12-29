@@ -1,0 +1,32 @@
+body {
+    font-family: 'Montserrat';
+    background-color: #f4f6f8;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card h5 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.card strong {
+    font-size: 1.2rem;
+}
+
+.table thead {
+    background-color: #f1f3f5;
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.table td {
+    font-size: 0.9rem;
+}
