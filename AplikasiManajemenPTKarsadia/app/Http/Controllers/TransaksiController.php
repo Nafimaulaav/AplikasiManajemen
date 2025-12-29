@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ModelTransaksiHarian;
 use Carbon\Carbon;
+use App\Helpers\RiwayatHelper;
 
 class TransaksiController extends Controller
 {
@@ -47,6 +48,14 @@ class TransaksiController extends Controller
             'total_transaksi_harian' => $request->total_transaksi_harian,
             'nama_petugas' => $request->nama_petugas,
         ]);
+        
+        // buat record tambah ke riwayat
+        $tanggal = Carbon::parse($request->tanggal_waktu_transaksi)->format('d-m-Y');
+        RiwayatHelper::catat(
+            'Tambah',
+            'Transaksi',
+            'Menambahkan data transaksi pada ' . $tanggal
+        );
 
         return redirect()->route('pendapatan')->with('success', 'Data berhasil disimpan!');
     }
@@ -87,6 +96,14 @@ class TransaksiController extends Controller
             'nama_petugas' => $request->nama_petugas,
         ]);
 
+        // buat record update ke riwayat
+        $tanggal = Carbon::parse($request->tanggal_waktu_transaksi)->format('d-m-Y');
+        RiwayatHelper::catat(
+            'Ubah',
+            'Transaksi',
+            'Mengubah data transaksi pada ' . $tanggal
+        );
+
         // Balikkan ke halaman utama dengan pesan sukses
         return redirect()->route('pendapatan')->with('success', 'Data berhasil diperbarui!');
     }
@@ -96,6 +113,12 @@ class TransaksiController extends Controller
     public function destroy($id)
     {
         ModelTransaksiHarian::findOrFail($id)->delete();
+        // buat record hapus ke riwayat
+        RiwayatHelper::catat(
+            'Hapus',
+            'Transaksi',
+            'Menghapus data transaksi dengan ID ' . $id
+        );
         return redirect()->route('pendapatan')->with('success', 'Data berhasil dihapus!');
     }
 }

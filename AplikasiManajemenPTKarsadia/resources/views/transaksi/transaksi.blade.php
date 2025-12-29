@@ -226,7 +226,7 @@
             @csrf
             @method('DELETE')
             <div class="modal-actions">
-                <<button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
+                <button type="submit" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
                 <button type="button" class="btn btn-cancel-custom" onclick="toggleDeleteModal(false)">Batal</button>
             </div>
         </form>

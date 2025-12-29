@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ModelPanen;
 use App\Models\ModelGreenhouse;
+use App\Helpers\RiwayatHelper;
 
 class PanenController extends Controller
 {
@@ -44,6 +45,13 @@ class PanenController extends Controller
 
         ModelPanen::create($data);
         
+        // buat record tambah ke riwayat
+        RiwayatHelper::catat(
+            'Tambah',
+            'Panen',
+            'Menambahkan data panen pada ' . $data['tanggal_panen']
+        );
+
         return redirect()->route('panen.index')
             ->with('success', 'Data panen berhasil ditambahkan');
     }
@@ -71,6 +79,13 @@ class PanenController extends Controller
         $panen = ModelPanen::findOrFail($id_panen);
         $panen->update($data);
 
+        // buat record update ke riwayat
+        RiwayatHelper::catat(
+            'Ubah',
+            'Panen',
+            'Mengupdate data panen pada ' . $data['tanggal_panen']
+        );
+
         return redirect()->route('panen.index')
             ->with('success', 'Data panen berhasil diupdate');
     }
@@ -79,7 +94,15 @@ class PanenController extends Controller
     public function DestroyPanen($id_panen)
     {
         $panen = ModelPanen::findOrFail($id_panen);
+
         $panen->delete();
+
+        // buat record hapus ke riwayat
+        RiwayatHelper::catat(
+            'Hapus',
+            'Panen',
+            'Menghapus data panen pada ' . $panen->tanggal_panen,
+        );
 
         return redirect()->route('panen.index')
             ->with('success', 'Data panen berhasil dihapus');
