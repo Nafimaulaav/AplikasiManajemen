@@ -16,7 +16,7 @@ Route::prefix('laporan')->group(function () {
     });
 
     // ngedit laporan harian
-    Route::middleware('role:admin,petugas')->group(function(){
+    Route::middleware('role:admin')->group(function(){
         Route::get('/edit/{id_laporanharian}', [LaporanController::class, 'formUpdateLaporan'])->name('laporan.edit');
         Route::post('/edit/{id_laporanharian}', [LaporanController::class, 'update'])->name('laporan.update');
     });

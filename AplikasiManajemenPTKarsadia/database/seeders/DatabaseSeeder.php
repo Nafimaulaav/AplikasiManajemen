@@ -26,24 +26,32 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        // ni buat seeder gh
-        $this->call([
-            GreenhouserSeeder::class,
+        // ni buat seeder user petugas
+        ModelUser::create([
+            'id_user' => 'U0002',
+            'username' => 'udin',
+            'password' => Hash::make('123'),
+            'role' => 'petugas',
         ]);
 
-        // ni buat seeder qc
-        $this->call([
-            QCSeeder::class,
-        ]);
+        // // ni buat seeder gh
+        // $this->call([
+        //     GreenhouserSeeder::class,
+        // ]);
 
-        // ni buat seeder laporan harian
-        $this->call([
-            LaporanSeeder::class,
-        ]);
+        // // ni buat seeder qc
+        // $this->call([
+        //     QCSeeder::class,
+        // ]);
 
-        // ni buat seeder riwayat
-        $this->call([
-            RiwayatSeeder::class,
-        ]);
+        // // ni buat seeder laporan harian
+        // $this->call([
+        //     LaporanSeeder::class,
+        // ]);
+
+        // // ni buat seeder riwayat
+        // $this->call([
+        //     RiwayatSeeder::class,
+        // ]);
     }
 }

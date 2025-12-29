@@ -8,6 +8,7 @@ use App\Models\ModelLaporanHarian;
 use App\Models\ModelGreenhouse;
 
 
+
 class LaporanController extends Controller
 {
     // buat nampilin halaman laporan
