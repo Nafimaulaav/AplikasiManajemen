@@ -75,7 +75,7 @@ class GHController extends Controller
 
     //update greenhouse
     public function UpdateGreenhouse(Request $request, $id_greenhouse){
-        if (auth()->user()->role !== 'Admin') {
+        if (auth()->user()->role !== 'admin') {
             return redirect()->route('greenhouse.index')->with('error', 'Anda tidak memiliki izin untuk mengupdate greenhouse.');
         }
         $greenhouse = ModelGreenhouse::findOrFail($id_greenhouse);

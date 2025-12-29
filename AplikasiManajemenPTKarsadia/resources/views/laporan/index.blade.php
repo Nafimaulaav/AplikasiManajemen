@@ -113,7 +113,7 @@
                 <div class="card-conten-gh">
                     <div class="info-row"><strong>Petugas:</strong> {{ $laporan->nama_petugas }}</div>
                     <div class="info-row"><strong>Aktivitas:</strong> {{ $laporan->aktivitas }}</div>
-                    <div class="info-row"><strong>Catatan:</strong> {{ $laporan->catatan }}</div>
+                    <div class="info-row"><strong>Catatan:</strong> {{ $laporan->catatan ?? '-' }}</div>
                 </div>
             </div>
         </div>

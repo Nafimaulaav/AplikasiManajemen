@@ -140,7 +140,7 @@
             <div class="modal-body">
                 <form id="formEditGH" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <!-- @method('PUT') -->
+                    @method('POST')
                     <div class="mb-3">
                         <label>ID Greenhouse</label>
                         <input type="text" name="id_greenhouse" id="editID" class="form-control" readonly>

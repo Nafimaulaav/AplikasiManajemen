@@ -56,13 +56,13 @@
                     C:{{ $p->jumlah_grade_c }}
                 </td>
                 <td class="aksi">
-                    @if(auth()->user()->role === 'admin ')
-                        <button class="btn-edit" onclick="editPanen(this)" title="Edit">
+                    @if(auth()->user()->role === 'admin')
+                        <button type="button" class="btn-edit" onclick="editPanen(this)" title="Edit">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button class="btn-delete" onclick="hapusPanen(this)" title="Hapus">
+                        <button type="button" class="btn-delete" onclick="hapusPanen(this)" title="Hapus">
                             <i class="bi bi-trash"></i>
-                    </button>
+                        </button>
                     @else
                         <span style="color:#aaa;">Tidak ada aksi</span>
                     @endif
@@ -100,15 +100,14 @@
     </div>
 </div>
 
-@if(auth()->user()->role === 'admin ')
+@if(auth()->user()->role === 'admin')
     <!-- ================= MODAL EDIT ================= -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-card">
             <h3>Edit Panen</h3>
             <form method="POST" id="formEdit">
             @csrf
-            @method('PUT')
-            <input id="e_id" readonly>
+            <input type="hidden" name="id_panen" id="e_id">
             <input type="date" name="tanggal_panen" id="e_tanggal" required>
             <select name="id_greenhouse" id="e_greenhouse" required>
                 @foreach($greenhouses as $g)
@@ -133,7 +132,6 @@
             <p>Greenhouse: <b><span id="d_gh"></span></b></p>
             <form method="POST" id="formDelete">
             @csrf
-            @method('DELETE')
             <button type="submit" class="btn-delete">Hapus</button>
             <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
             </form>
@@ -175,7 +173,7 @@ tbody tr:hover{background:#f5f7f8}
 function showModal(id){document.getElementById(id).style.display='flex'}
 function closeModal(){document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none')}
 
-@if(auth()->user()->role === 'admin ')
+@if(auth()->user()->role === 'admin')
 function editPanen(btn){
     let tr=btn.closest('tr');
     e_id.value=tr.dataset.id;

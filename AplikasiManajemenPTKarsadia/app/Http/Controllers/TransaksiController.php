@@ -68,7 +68,7 @@ class TransaksiController extends Controller
      */
     public function edit($id)
     {
-        if(!Auth::user()->is_admin) {
+        if(Auth::user()->role !== 'admin') {
             return redirect()->route('pendapatan')
                 ->with('error', 'Anda tidak memiliki izin untuk mengedit data transaksi.');
         }
@@ -84,7 +84,7 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if(!Auth::user()->is_admin) {
+        if(Auth::user()->role !== 'admin') {
             return redirect()->route('pendapatan')
                 ->with('error', 'Anda tidak memiliki izin untuk mengupdate data transaksi.');
         }
@@ -121,7 +121,7 @@ class TransaksiController extends Controller
 
     public function destroy($id)
     {
-        if(!Auth::user()->is_admin) {
+        if(Auth::user()->role !== 'admin') {
             return redirect()->route('pendapatan')
                 ->with('error', 'Anda tidak memiliki izin untuk menghapus data transaksi.');
         }

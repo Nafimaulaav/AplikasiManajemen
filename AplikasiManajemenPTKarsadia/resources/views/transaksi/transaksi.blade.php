@@ -134,7 +134,7 @@
                             <td>{{ $item->nama_petugas }}</td>
                             <td>Rp {{ number_format($item->total_transaksi_harian, 0, ',', '.') }}</td>
                             <td class="text-center">
-                                @if(auth()->user()->role === 'admin ')
+                                @if(auth()->user()->role === 'admin')
                                     {{-- Tombol Edit yang memicu JavaScript --}}
                                     <button type="button" class="btn btn-sm btn-warning" 
                                         onclick="openEditModal('{{ $item->id_transaksi }}', '{{ $item->tanggal_waktu_transaksi }}', '{{ $item->total_transaksi_harian }}', '{{ $item->nama_petugas }}')">

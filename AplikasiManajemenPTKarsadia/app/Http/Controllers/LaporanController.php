@@ -42,6 +42,8 @@ class LaporanController extends Controller
             'id_greenhouse' => 'required|exists:greenhouse,id_greenhouse',
         ]);
 
+        $validated['catatan'] = $validated['catatan'] ?? '-';
+
         if ($request->hasFile('gambar_laporan')){
             $validated['gambar_laporan'] = $request->file('gambar_laporan')->store('laporan', 'public');
         } else {
@@ -85,6 +87,8 @@ class LaporanController extends Controller
             'gambar_laporan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'catatan' => 'nullable|string',
         ]);
+
+        $validated['catatan'] = $validated['catatan'] ?? '-';
 
         if ($request->hasFile('gambar_laporan')) {
             $validated['gambar_laporan'] =

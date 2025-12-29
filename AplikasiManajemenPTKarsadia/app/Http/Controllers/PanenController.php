@@ -60,7 +60,7 @@ class PanenController extends Controller
     // Form edit panen
     public function FormEditPanen($id_panen)
     {
-        if (!Auth::user()->is_admin) {
+        if (Auth::user()->role !== 'admin') {
             return redirect()->route('panen.index')
                 ->with('error', 'Anda tidak memiliki izin untuk mengedit data panen.');
         }
@@ -72,7 +72,7 @@ class PanenController extends Controller
     // Update data panen
     public function UpdatePanen(Request $request, $id_panen)
     {
-        if (!Auth::user()->is_admin) {
+        if (Auth::user()->role !== 'admin') {
             return redirect()->route('panen.index')
                 ->with('error', 'Anda tidak memiliki izin untuk mengupdate data panen.');
         }
@@ -102,7 +102,7 @@ class PanenController extends Controller
     // Hapus data panen
     public function DestroyPanen($id_panen)
     {
-        if (!Auth::user()->is_admin) {
+        if (Auth::user()->role !== 'admin') {
             return redirect()->route('panen.index')
                 ->with('error', 'Anda tidak memiliki izin untuk menghapus data panen.');
         }
