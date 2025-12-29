@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
+<!-- <style>
     /* Styling Modal & Card */
     .modal-overlay {
         display: none;
@@ -70,14 +70,14 @@
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
-</style>
+</style> -->
 
 <div class="container">
     {{-- Pesan Sukses --}}
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
         </div>
     @endif
 
@@ -142,7 +142,7 @@
 
                                 <form action="{{ route('transaksi.destroy', $item->id_transaksi) }}" method="POST" class="d-inline">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</button>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
                                 </form>
                             </td>
                         </tr>
@@ -179,9 +179,9 @@
                 <label>Nama Petugas</label>
                 <input type="text" name="nama_petugas" placeholder="Nama Petugas" required>
             </div>
-            <div class="d-flex gap-2">
-                <button type="button" class="btn btn-secondary w-100" onclick="toggleAddModal(false)">Batal</button>
+            <div class="modal-actions">
                 <button type="submit" class="btn-submit-custom">Tambahkan</button>
+                <button type="button" class="btn btn-cancel-custom" onclick="toggleAddModal(false)">Batal</button>
             </div>
         </form>
     </div>
@@ -209,9 +209,25 @@
                 <label>Nama Petugas</label>
                 <input type="text" name="nama_petugas" id="edit_petugas" required>
             </div>
-            <div class="d-flex gap-2">
-                <button type="button" class="btn btn-secondary w-100" onclick="toggleEditModal(false)">Batal</button>
-                <button type="submit" class="btn-submit-custom" style="background-color: #f39c12;">Simpan Perubahan</button>
+            <div class="modal-actions">
+                <button type="submit" class="btn-submit-custom">Simpan Perubahan</button>
+                <button type="button" class="btn btn-cancel-custom" onclick="toggleEditModal(false)">Batal</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Konfirmasi Hapus -->
+<div id="modalHapus" class="modal-overlay">
+    <div class="modal-content-custom">
+        <h3 class="text-center mb-3">Konfirmasi Hapus Data</h3>
+        <p class="text-center">Apakah Anda yakin ingin menghapus data ini?</p>
+        <form id="formHapusAction" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="modal-actions">
+                <<button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
+                <button type="button" class="btn btn-cancel-custom" onclick="toggleDeleteModal(false)">Batal</button>
             </div>
         </form>
     </div>
@@ -249,12 +265,46 @@
     }
 
     // Klik luar modal untuk menutup
+    // window.onclick = function(event) {
+    //     const modalAdd = document.getElementById('modalTambah');
+    //     const modalEdit = document.getElementById('modalEdit');
+    //     if (event.target == modalAdd) toggleAddModal(false);
+    //     if (event.target == modalEdit) toggleEditModal(false);
+    // }
     window.onclick = function(event) {
-        const modalAdd = document.getElementById('modalTambah');
-        const modalEdit = document.getElementById('modalEdit');
-        if (event.target == modalAdd) toggleAddModal(false);
-        if (event.target == modalEdit) toggleEditModal(false);
+    const modals = [
+        document.getElementById('modalTambah'),
+        document.getElementById('modalEdit'),
+        document.getElementById('modalHapus')
+    ];
+
+    modals.forEach(modal => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+    // Logika Modal Hapus
+    function toggleDeleteModal(show) {
+        document.getElementById('modalHapus').style.display = show ? 'block' : 'none';
     }
+    function openDeleteModal(id) {
+        document.getElementById('formHapusAction').action = "/pendapatan/" + id;
+        toggleDeleteModal(true);
+    }
+
+    // biar notif ilang sendiri setelah 3 detik
+    document.addEventListener('DOMContentLoaded', () => {
+        const alertBox = document.querySelector('.alert');
+        if (alertBox) {
+            setTimeout(() => {
+                alertBox.style.opacity = '0';
+                alertBox.style.transition = 'opacity 0.5s';
+                setTimeout(() => alertBox.remove(), 500);
+            }, 3000);
+        }
+    });
 </script>
 
 @endsection

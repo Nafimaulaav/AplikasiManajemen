@@ -22,6 +22,7 @@
    <link rel="stylesheet" href="{{ asset('css/laporan.css') }}">
    <link rel="stylesheet" href="{{ asset('css/detailgh.css') }}">
    <link rel="stylesheet" href="{{ asset('css/panen.css') }}">
+   <link rel="stylesheet" href="{{ asset('css/transaksi.css') }}">
  </head>
 
  @if (session('success'))
