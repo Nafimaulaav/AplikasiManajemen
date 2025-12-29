@@ -8,6 +8,8 @@ class ModelRiwayat extends Model
 {
     // buat bikin tabelnya
     protected $table = 'riwayat';
+
+    public $timestamps = true;
     
     // buat yg bisa diiisi
     protected $fillable =[

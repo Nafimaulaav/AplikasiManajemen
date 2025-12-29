@@ -17,7 +17,7 @@
         <tbody>
             @foreach ($riwayat as $log)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($log->waktu_aksi)->format('d M Y H:i') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y H:i') }}</td>
                     <td>{{ $log->user->username ?? $log->user_id }}</td>
                     <td>{{ $log->tipe_aksi }}</td>
                     <td>{{ $log->menu_terkait }}</td>

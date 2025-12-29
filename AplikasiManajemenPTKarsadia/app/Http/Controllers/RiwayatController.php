@@ -1,14 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use App\Models\ModelRiwayat;
-use App\Models\ModelGreenhouse;
-use App\Models\ModelLaporanHarian;
-use App\Models\ModelQC;
-use App\Models\ModelPanen;
-use App\Models\ModelTransaksiHarian;
+
 
 class RiwayatController extends Controller
 {
