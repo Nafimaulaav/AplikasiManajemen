@@ -56,12 +56,16 @@
                     C:{{ $p->jumlah_grade_c }}
                 </td>
                 <td class="aksi">
-                    <button class="btn-edit" onclick="editPanen(this)" title="Edit">
-                        <i class="bi bi-pencil"></i>
+                    @if(auth()->user()->role === 'admin ')
+                        <button class="btn-edit" onclick="editPanen(this)" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn-delete" onclick="hapusPanen(this)" title="Hapus">
+                            <i class="bi bi-trash"></i>
                     </button>
-                    <button class="btn-delete" onclick="hapusPanen(this)" title="Hapus">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                    @else
+                        <span style="color:#aaa;">Tidak ada aksi</span>
+                    @endif
                 </td>
             </tr>
             @empty
@@ -96,45 +100,46 @@
     </div>
 </div>
 
-<!-- ================= MODAL EDIT ================= -->
-<div class="modal-overlay" id="editModal">
-    <div class="modal-card">
-        <h3>Edit Panen</h3>
-        <form method="POST" id="formEdit">
-        @csrf
-        @method('PUT')
-        <input id="e_id" readonly>
-        <input type="date" name="tanggal_panen" id="e_tanggal" required>
-        <select name="id_greenhouse" id="e_greenhouse" required>
-            @foreach($greenhouses as $g)
-                <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
-            @endforeach
-        </select>
-        <input type="number" name="jumlah_panen" id="e_jumlah" required>
-        <input type="number" name="jumlah_grade_a" id="e_a" required>
-        <input type="number" name="jumlah_grade_b" id="e_b" required>
-        <input type="number" name="jumlah_grade_c" id="e_c" required>
-        <button type="submit" class="btn-submit">Update</button>
-        <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-        </form>
+@if(auth()->user()->role === 'admin ')
+    <!-- ================= MODAL EDIT ================= -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-card">
+            <h3>Edit Panen</h3>
+            <form method="POST" id="formEdit">
+            @csrf
+            @method('PUT')
+            <input id="e_id" readonly>
+            <input type="date" name="tanggal_panen" id="e_tanggal" required>
+            <select name="id_greenhouse" id="e_greenhouse" required>
+                @foreach($greenhouses as $g)
+                    <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
+                @endforeach
+            </select>
+            <input type="number" name="jumlah_panen" id="e_jumlah" required>
+            <input type="number" name="jumlah_grade_a" id="e_a" required>
+            <input type="number" name="jumlah_grade_b" id="e_b" required>
+            <input type="number" name="jumlah_grade_c" id="e_c" required>
+            <button type="submit" class="btn-submit">Update</button>
+            <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<!-- ================= MODAL DELETE ================= -->
-<div class="modal-overlay" id="deleteModal">
-    <div class="modal-card">
-        <h3>Hapus Data?</h3>
-        <p>ID Panen: <b><span id="d_id"></span></b></p>
-        <p>Greenhouse: <b><span id="d_gh"></span></b></p>
-        <form method="POST" id="formDelete">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn-delete">Hapus</button>
-        <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-        </form>
+    <!-- ================= MODAL DELETE ================= -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-card">
+            <h3>Hapus Data?</h3>
+            <p>ID Panen: <b><span id="d_id"></span></b></p>
+            <p>Greenhouse: <b><span id="d_gh"></span></b></p>
+            <form method="POST" id="formDelete">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn-delete">Hapus</button>
+            <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+            </form>
+        </div>
     </div>
-</div>
-
+@endif
 <!-- ================= CSS ================= -->
 <!-- <style>
 .panen-main{max-width:1100px;margin:auto;padding:20px}
@@ -170,6 +175,7 @@ tbody tr:hover{background:#f5f7f8}
 function showModal(id){document.getElementById(id).style.display='flex'}
 function closeModal(){document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none')}
 
+@if(auth()->user()->role === 'admin ')
 function editPanen(btn){
     let tr=btn.closest('tr');
     e_id.value=tr.dataset.id;
@@ -190,6 +196,7 @@ function hapusPanen(btn){
     formDelete.action=`/panen/hapus/${tr.dataset.id}`;
     showModal('deleteModal');
 }
+@endif
 
 document.getElementById('searchInput').addEventListener('keyup',function(){
     let key=this.value.toLowerCase();

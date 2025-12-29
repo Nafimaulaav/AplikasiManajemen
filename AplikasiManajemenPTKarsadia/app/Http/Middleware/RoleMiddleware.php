@@ -25,7 +25,7 @@ class RoleMiddleware
 
         //mengecek role
         if (!in_array($user->role, $roles)){
-            return redirect('login')->with('error','Anda tidak memiliki akses kehalaman ini');
+            return redirect()->back()->with('error','Anda tidak memiliki akses kehalaman ini')->getStatusCode(403);
         }
 
         return $next($request);

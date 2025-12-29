@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ModelTransaksiHarian;
 use Carbon\Carbon;
 use App\Helpers\RiwayatHelper;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
@@ -67,6 +68,10 @@ class TransaksiController extends Controller
      */
     public function edit($id)
     {
+        if(!Auth::user()->is_admin) {
+            return redirect()->route('pendapatan')
+                ->with('error', 'Anda tidak memiliki izin untuk mengedit data transaksi.');
+        }
         // Mencari data berdasarkan ID (primary key kamu adalah id_transaksi)
         $transaksi = ModelTransaksiHarian::findOrFail($id);
 
@@ -79,6 +84,10 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(!Auth::user()->is_admin) {
+            return redirect()->route('pendapatan')
+                ->with('error', 'Anda tidak memiliki izin untuk mengupdate data transaksi.');
+        }
         // Validasi inputan
         $request->validate([
             'tanggal_waktu_transaksi' => 'required',
@@ -112,6 +121,10 @@ class TransaksiController extends Controller
 
     public function destroy($id)
     {
+        if(!Auth::user()->is_admin) {
+            return redirect()->route('pendapatan')
+                ->with('error', 'Anda tidak memiliki izin untuk menghapus data transaksi.');
+        }
         ModelTransaksiHarian::findOrFail($id)->delete();
         // buat record hapus ke riwayat
         RiwayatHelper::catat(

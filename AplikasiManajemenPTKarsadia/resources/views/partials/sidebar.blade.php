@@ -30,11 +30,13 @@
                 <span class="menu-text">Pendapatan</span>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="{{ route('riwayat.index') }}" class="menu-link">
-                <i class="bi bi-chat-right-fill"></i>
-                <span class="menu-text">Riwayat</span>
-            </a>
-        </li>
+        @if(auth()->user()->role === 'admin ')
+            <li class="menu-item">
+                <a href="{{ route('riwayat.index') }}" class="menu-link">
+                    <i class="bi bi-chat-right-fill"></i>
+                    <span class="menu-text">Riwayat</span>
+                </a>
+            </li>
+        @endif
     </ul>
 </div>

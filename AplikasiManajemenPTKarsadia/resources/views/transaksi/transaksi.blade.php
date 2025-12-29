@@ -134,16 +134,20 @@
                             <td>{{ $item->nama_petugas }}</td>
                             <td>Rp {{ number_format($item->total_transaksi_harian, 0, ',', '.') }}</td>
                             <td class="text-center">
-                                {{-- Tombol Edit yang memicu JavaScript --}}
-                                <button type="button" class="btn btn-sm btn-warning" 
-                                    onclick="openEditModal('{{ $item->id_transaksi }}', '{{ $item->tanggal_waktu_transaksi }}', '{{ $item->total_transaksi_harian }}', '{{ $item->nama_petugas }}')">
-                                    Edit
-                                </button>
+                                @if(auth()->user()->role === 'admin ')
+                                    {{-- Tombol Edit yang memicu JavaScript --}}
+                                    <button type="button" class="btn btn-sm btn-warning" 
+                                        onclick="openEditModal('{{ $item->id_transaksi }}', '{{ $item->tanggal_waktu_transaksi }}', '{{ $item->total_transaksi_harian }}', '{{ $item->nama_petugas }}')">
+                                        Edit
+                                    </button>
 
-                                <form action="{{ route('transaksi.destroy', $item->id_transaksi) }}" method="POST" class="d-inline">
-                                    @csrf @method('DELETE')
-                                    <button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
-                                </form>
+                                    <form action="{{ route('transaksi.destroy', $item->id_transaksi) }}" method="POST" class="d-inline">
+                                        @csrf @method('DELETE')
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
+                                    </form>
+                                @else
+                                    <span style="color:#aaa;">Tidak ada aksi</span>
+                                @endif
                             </td>
                         </tr>
                     @empty
