@@ -153,9 +153,7 @@
 
 .laporan-card-link:hover .laporan-card {
     text-decoration: none;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-    transition: 0.2s;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15)
 }
 
 .btn-tambah:hover {
@@ -180,4 +178,16 @@
     cursor: pointer;
     transform: translateY(-2px);
     transition: 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #6c757d;
+    color: black;
+    cursor: pointer;
+    transform: translateY(-2px);
+    transition: 0.2s;
+}
+
+.modal-content {
+    margin-top: 100px;
 }

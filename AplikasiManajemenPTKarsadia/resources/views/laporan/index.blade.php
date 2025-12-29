@@ -73,7 +73,7 @@
     </div>
 
     <div class="card-list-gh">
-        @foreach ($dataLaporan as $laporan)
+        @forelse ($dataLaporan as $laporan)
         <div class="gh-card">
             <div class="card-header-gh d-flex justify-content-between align-items-start">
                 <div class="title-gh">
@@ -117,7 +117,13 @@
                 </div>
             </div>
         </div>
-        @endforeach
+        {{-- klo laporan kosong --}}
+        @empty
+            <div class="text-center py-5">
+                <h3 class="text-muted fw-semibold">Tidak ada laporan harian</h3>
+                <p class="text-muted">Belum ada laporan harian yang diunggah.</p>
+            </div>
+        @endforelse
 
                             {{-- Modal Edit Laporan --}}
                       <div class="modal fade" id="modalEditLaporan" tabindex="-1" aria-hidden="true">
@@ -145,7 +151,7 @@
                                   <select name="id_greenhouse" class="form-select" required>
                                       @foreach ($greenhouse as $gh)
                                           <option value="{{ $gh->id_greenhouse }}"
-                                              {{ $laporan->id_greenhouse == $gh->id_greenhouse ? 'selected' : '' }}>
+                                              {{ $gh->id_greenhouse ? 'selected' : '' }}>
                                               {{ $gh->nama_greenhouse }}
                                           </option>
                                       @endforeach
