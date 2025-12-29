@@ -11,7 +11,7 @@
 
     <!-- ALERT -->
     @if(session('success'))
-        <div class="alert-success">{{ session('success') }}</div>
+        <div id="gh-flash-alert" class="alert-success">{{ session('success') }}</div>
     @endif
 
     <!-- CARD -->
@@ -56,8 +56,12 @@
                     C:{{ $p->jumlah_grade_c }}
                 </td>
                 <td class="aksi">
-                    <button class="btn-edit" onclick="editPanen(this)">✏️</button>
-                    <button class="btn-delete" onclick="hapusPanen(this)">🗑️</button>
+                    <button class="btn-edit" onclick="editPanen(this)" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn-delete" onclick="hapusPanen(this)" title="Hapus">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </td>
             </tr>
             @empty
@@ -72,67 +76,67 @@
 
 <!-- ================= MODAL TAMBAH ================= -->
 <div class="modal-overlay" id="tambahModal">
-<div class="modal-card">
-<h3>Tambah Panen</h3>
-<form method="POST" action="{{ route('store_panen') }}">
-@csrf
-<input type="date" name="tanggal_panen" required>
-<select name="id_greenhouse" required>
-    @foreach($greenhouses as $g)
-        <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
-    @endforeach
-</select>
-<input type="number" name="jumlah_panen" placeholder="Jumlah Panen" required>
-<input type="number" name="jumlah_grade_a" placeholder="Grade A" required>
-<input type="number" name="jumlah_grade_b" placeholder="Grade B" required>
-<input type="number" name="jumlah_grade_c" placeholder="Grade C" required>
-<button type="submit" class="btn-submit">Simpan</button>
-<button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-</form>
-</div>
+    <div class="modal-card">
+        <h3>Tambah Panen</h3>
+        <form method="POST" action="{{ route('store_panen') }}">
+        @csrf
+        <input type="date" name="tanggal_panen" required>
+        <select name="id_greenhouse" required>
+            @foreach($greenhouses as $g)
+                <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
+            @endforeach
+        </select>
+        <input type="number" name="jumlah_panen" placeholder="Jumlah Panen" required>
+        <input type="number" name="jumlah_grade_a" placeholder="Grade A" required>
+        <input type="number" name="jumlah_grade_b" placeholder="Grade B" required>
+        <input type="number" name="jumlah_grade_c" placeholder="Grade C" required>
+        <button type="submit" class="btn-submit">Simpan</button>
+        <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+        </form>
+    </div>
 </div>
 
 <!-- ================= MODAL EDIT ================= -->
 <div class="modal-overlay" id="editModal">
-<div class="modal-card">
-<h3>Edit Panen</h3>
-<form method="POST" id="formEdit">
-@csrf
-@method('PUT')
-<input id="e_id" readonly>
-<input type="date" name="tanggal_panen" id="e_tanggal" required>
-<select name="id_greenhouse" id="e_greenhouse" required>
-    @foreach($greenhouses as $g)
-        <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
-    @endforeach
-</select>
-<input type="number" name="jumlah_panen" id="e_jumlah" required>
-<input type="number" name="jumlah_grade_a" id="e_a" required>
-<input type="number" name="jumlah_grade_b" id="e_b" required>
-<input type="number" name="jumlah_grade_c" id="e_c" required>
-<button type="submit" class="btn-submit">Update</button>
-<button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-</form>
-</div>
+    <div class="modal-card">
+        <h3>Edit Panen</h3>
+        <form method="POST" id="formEdit">
+        @csrf
+        @method('PUT')
+        <input id="e_id" readonly>
+        <input type="date" name="tanggal_panen" id="e_tanggal" required>
+        <select name="id_greenhouse" id="e_greenhouse" required>
+            @foreach($greenhouses as $g)
+                <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
+            @endforeach
+        </select>
+        <input type="number" name="jumlah_panen" id="e_jumlah" required>
+        <input type="number" name="jumlah_grade_a" id="e_a" required>
+        <input type="number" name="jumlah_grade_b" id="e_b" required>
+        <input type="number" name="jumlah_grade_c" id="e_c" required>
+        <button type="submit" class="btn-submit">Update</button>
+        <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+        </form>
+    </div>
 </div>
 
 <!-- ================= MODAL DELETE ================= -->
 <div class="modal-overlay" id="deleteModal">
-<div class="modal-card">
-<h3>Hapus Data?</h3>
-<p>ID Panen: <b><span id="d_id"></span></b></p>
-<p>Greenhouse: <b><span id="d_gh"></span></b></p>
-<form method="POST" id="formDelete">
-@csrf
-@method('DELETE')
-<button type="submit" class="btn-delete">Hapus</button>
-<button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-</form>
-</div>
+    <div class="modal-card">
+        <h3>Hapus Data?</h3>
+        <p>ID Panen: <b><span id="d_id"></span></b></p>
+        <p>Greenhouse: <b><span id="d_gh"></span></b></p>
+        <form method="POST" id="formDelete">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn-delete">Hapus</button>
+        <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+        </form>
+    </div>
 </div>
 
 <!-- ================= CSS ================= -->
-<style>
+<!-- <style>
 .panen-main{max-width:1100px;margin:auto;padding:20px}
 .panen-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .btn-tambah{padding:8px 16px;border:none;border-radius:6px;background:#EAA652;color:#fff}
@@ -159,7 +163,7 @@ tbody tr:hover{background:#f5f7f8}
 .modal-card input,.modal-card select{width:100%;padding:8px;margin-bottom:8px}
 .btn-submit{background:#EAA652;border:none;color:#fff;padding:8px;border-radius:4px;width:100%}
 .btn-cancel{background:#6c757d;border:none;color:#fff;padding:8px;border-radius:4px;width:100%;margin-top:5px}
-</style>
+</style> -->
 
 <!-- ================= JS (RINGAN) ================= -->
 <script>
@@ -191,6 +195,31 @@ document.getElementById('searchInput').addEventListener('keyup',function(){
     let key=this.value.toLowerCase();
     document.querySelectorAll('#panenTable tbody tr').forEach(r=>{
         r.style.display=r.innerText.toLowerCase().includes(key)?'':'none';
+    });
+});
+
+// auto hide flash message
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertBox = document.getElementById('gh-flash-alert');
+
+        if (alertBox) {
+            setTimeout(() => {
+                alertBox.style.transition = 'opacity 0.5s ease';
+                alertBox.style.opacity = '0';
+
+                setTimeout(() => {
+                    alertBox.remove();
+                }, 500);
+            }, 3000); // 3 detik
+        }
+    });
+
+// close modal klik area luar
+document.querySelectorAll('.modal-overlay').forEach(modal=>{
+    modal.addEventListener('click',function(e){
+        if(e.target===this){
+            closeModal();
+        }
     });
 });
 </script>
