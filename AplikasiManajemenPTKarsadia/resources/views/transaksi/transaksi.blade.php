@@ -225,13 +225,15 @@
 <div id="modalHapus" class="modal-overlay">
     <div class="modal-content-custom">
         <h3 class="text-center mb-3">Konfirmasi Hapus Data</h3>
-        <p class="text-center">Apakah Anda yakin ingin menghapus data ini?</p>
+        <p class="text-center">Apakah Anda yakin ingin menghapus data <br><strong id="hapus_id_display"></strong>?</p>
+        
         <form id="formHapusAction" method="POST">
             @csrf
             @method('DELETE')
-            <div class="modal-actions">
-                <button type="submit" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
-                <button type="button" class="btn btn-cancel-custom" onclick="toggleDeleteModal(false)">Batal</button>
+            <div class="modal-actions d-flex justify-content-center gap-2">
+                {{-- Tombol ini cukup type="submit" saja, tidak perlu onclick lagi --}}
+                <button type="submit" class="btn btn-danger">Hapus</button>
+                <button type="button" class="btn btn-secondary" onclick="toggleDeleteModal(false)">Batal</button>
             </div>
         </form>
     </div>
