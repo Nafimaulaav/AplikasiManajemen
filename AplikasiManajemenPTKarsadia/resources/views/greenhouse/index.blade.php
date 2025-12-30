@@ -12,11 +12,10 @@
         @endif
     </div>
     <div class="card-list-gh">
-        @foreach ($greenhouses as $gh)
+    @forelse ($greenhouses as $gh)
         <div class="gh-card">
             <div class="card-header-gh d-flex justify-content-between align-items-center">
                 <div class="title-gh d-flex gap-3 align-items-center">
-                    <!-- Link detail hanya untuk judul + ID -->
                     <a href="{{ route('detail_greenhouse', $gh->id_greenhouse) }}" class="gh-card-link">
                         <h2 class="nama-gh">{{ $gh->nama_greenhouse }}</h2>
                         <p class="id-gh">#{{ $gh->id_greenhouse }}</p>
@@ -25,25 +24,23 @@
 
                 @if (Auth::user()->role === 'admin')
                 <div class="card-action-gh">
-                    <!-- Tombol edit/hapus tidak di dalam link -->
                     <button type="button" class="btn edit-btn"
-                            data-id="{{ $gh->id_greenhouse }}"
-                            data-name="{{ $gh->nama_greenhouse }}"
-                            data-alamat="{{ $gh->alamat_greenhouse }}"
-                            data-status="{{ $gh->status_greenhouse }}"
-                            data-bs-toggle="modal" data-bs-target="#modalEditGH">
+                        data-id="{{ $gh->id_greenhouse }}"
+                        data-name="{{ $gh->nama_greenhouse }}"
+                        data-alamat="{{ $gh->alamat_greenhouse }}"
+                        data-status="{{ $gh->status_greenhouse }}"
+                        data-bs-toggle="modal" data-bs-target="#modalEditGH">
                         <i class="bi bi-pencil-fill"></i> Ubah
                     </button>
                     <button type="button" class="btn hapus-btn"
-                            data-id="{{ $gh->id_greenhouse }}"
-                            data-bs-toggle="modal" data-bs-target="#modalHapusGH">
+                        data-id="{{ $gh->id_greenhouse }}"
+                        data-bs-toggle="modal" data-bs-target="#modalHapusGH">
                         <i class="bi bi-trash-fill"></i> Hapus
                     </button>
                 </div>
                 @endif
             </div>
 
-            <!-- Body card bisa juga dijadikan link penuh -->
             <a href="{{ route('detail_greenhouse', $gh->id_greenhouse) }}" class="gh-card-link">
                 <div class="card-body-gh">
                     <div class="card-image-gh">
@@ -72,14 +69,23 @@
                         </div>
                         <div class="info-row">
                             <div class="info-label">Alamat:</div>
-                            <div class="info-value">{{ $gh->alamat_greenhouse ?? '-'}}</div>
+                            <div class="info-value">{{ $gh->alamat_greenhouse ?? '-' }}</div>
                         </div>
                     </div>
                 </div>
             </a>
         </div>
-        @endforeach
-    </div>
+    @empty
+        <!-- Tampilan jika greenhouse kosong -->
+        <div class="empty-state text-center p-5">
+            <h4>Greenhouse belum tersedia</h4>
+            <p class="text-muted">
+                Belum ada data rumah kaca yang terdaftar saat ini.
+            </p>
+        </div>
+    @endforelse
+</div>
+
 </div>
 
 <!-- tambah -->
