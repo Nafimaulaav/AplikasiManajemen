@@ -26,6 +26,20 @@
         <div class="gh-main-grid">
             {{-- Kiri: Monitoring & Spesifikasi --}}
             <div class="gh-left">
+                {{-- Perkiraan Cuaca --}}
+                <div class="gh-section">
+                    <div class="gh-section-header">
+                        <h2>Perkiraan Cuaca</h2>
+                    </div>
+                    <ul class="gh-list">
+                        <li><strong>Suhu:</strong> <span id="weather-temp">- °C</span></li>
+                        <li><strong>Kelembapan:</strong> <span id="weather-humidity">- %</span></li>
+                        <li><strong>Kondisi:</strong> <span id="weather-condition">-</span></li>
+                        <li><strong>Probabilitas Hujan:</strong> <span id="weather-rain">- %</span></li>
+                    </ul>
+                    <small id="weather-last-update" style="display:block; margin-top:10px; color:#555;">Last update: -</small>
+                </div>
+
                 {{-- Monitoring --}}
                 <div class="gh-section">
                     <div class="gh-section-header">
@@ -392,4 +406,60 @@
         }
     });
     
+    // FETCH WEATHER DATA
+    const weatherCodes = {
+        0: 'Cerah',
+        1: 'Cerah Berawan',
+        2: 'Cerah Berawan',
+        3: 'Berawan',
+        45: 'Kabut',
+        48: 'Kabut Beku',
+        51: 'Gerimis Ringan',
+        53: 'Gerimis Sedang',
+        55: 'Gerimis Lebat',
+        56: 'Gerimis Beku Ringan',
+        57: 'Gerimis Beku Berat',
+        61: 'Hujan Ringan',
+        63: 'Hujan Sedang',
+        65: 'Hujan Lebat',
+        66: 'Hujan Beku Ringan',
+        67: 'Hujan Beku Berat',
+        71: 'Salju Ringan',
+        73: 'Salju Sedang',
+        75: 'Salju Lebat',
+        77: 'Serpihan Salju',
+        80: 'Hujan Lokal Ringan',
+        81: 'Hujan Lokal Sedang',
+        82: 'Hujan Lokal Lebat',
+        85: 'Salju Lokal Ringan',
+        86: 'Salju Lokal Lebat',
+        95: 'Badai Petir',
+        96: 'Badai Petir Ringan Hujan',
+        99: 'Badai Petir Berat Hujan'
+    };
+
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.5142&longitude=109.2942&hourly=temperature_2m,relative_humidity_2m,weather_code,precipitation_probability&timezone=Asia%2FSingapore')
+    .then(res => res.json())
+    .then(data => {
+        // ambil data jam pertama
+        const temp = data.hourly.temperature_2m[0];
+        const humidity = data.hourly.relative_humidity_2m[0];
+        const code = data.hourly.weather_code[0];
+        const rain = data.hourly.precipitation_probability[0];
+
+        document.getElementById('weather-temp').innerText = temp + ' °C';
+        document.getElementById('weather-humidity').innerText = humidity + ' %';
+        document.getElementById('weather-condition').innerText = weatherCodes[code] || '-';
+        document.getElementById('weather-rain').innerText = rain + ' %';
+
+        // update last update
+        const now = new Date();
+        document.getElementById('weather-last-update').innerText = 
+            'Last update: ' + now.toLocaleString();
+    })
+    .catch(err => console.error('Error fetching weather:', err));
+
+    // Refresh setiap 1 jam (3600000 ms)
+    setInterval(fetchWeather, 3600000);
+
 </script>

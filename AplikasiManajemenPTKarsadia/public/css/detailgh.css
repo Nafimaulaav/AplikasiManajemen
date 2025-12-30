@@ -284,4 +284,14 @@
     border: 1px solid #ccc;
 }
 
+/* weather card */
+/* Card Weather mirip gh-section */
+/* Sedikit spacing untuk list weather */
+.gh-list li {
+    margin-bottom: 10px; /* sedikit lebih longgar dari default */
+}
+
+
+
+
 
