@@ -35,6 +35,10 @@ class ModelGreenhouse extends Model
         'sistem_dipakai_greenhouse'
     ];
 
+    protected $casts = [
+        'waktu_monitoring' => 'datetime',
+    ];
+
     // relasi ke model laporan harian
     public function laporanHarian()
     {

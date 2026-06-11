@@ -2,122 +2,130 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\ModelPanen;
-use App\Models\ModelGreenhouse;
 use App\Helpers\RiwayatHelper;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ModelGreenhouse;
+use App\Models\ModelPanen;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class PanenController extends Controller
 {
-    // Menampilkan semua data panen + kirim greenhouse untuk modal
+    /**
+     * Menampilkan seluruh data panen.
+     */
     public function index()
     {
-        $panen = ModelPanen::with('greenhouse')->get();
-        $greenhouses = ModelGreenhouse::all(); // TAMBAHKAN INI
+        $panen = ModelPanen::with('greenhouse')
+            ->orderBy('tanggal_panen', 'desc')
+            ->orderBy('id_panen', 'desc')
+            ->get();
+
+        $greenhouses = ModelGreenhouse::orderBy('id_greenhouse', 'asc')->get();
+
         return view('panen.index', compact('panen', 'greenhouses'));
     }
 
-    // Menampilkan detail panen
-    public function show($id_panen)
-    {
-        $panen = ModelPanen::with('greenhouse')->findOrFail($id_panen);
-        return view('panen.show', compact('panen'));
-    }
-
-    // Form tambah panen
-    public function FormCreatePanen()
-    {
-        $greenhouses = ModelGreenhouse::all();
-        return view('panen.form', compact('greenhouses'));
-    }
-
-    // Simpan data panen baru
+    /**
+     * Menyimpan data panen baru.
+     */
     public function StorePanen(Request $request)
     {
-        $data = $request->validate([
-            'tanggal_panen' => 'required|date',
-            'jumlah_panen'  => 'required|integer',
-            'jumlah_grade_a' => 'required|integer',
-            'jumlah_grade_b' => 'required|integer',
-            'jumlah_grade_c' => 'required|integer',
-            'id_greenhouse' => 'required|string|max:10|exists:greenhouse,id_greenhouse',
-        ]);
+        $validated = $request->validate($this->rules());
 
-        ModelPanen::create($data);
-        
-        // buat record tambah ke riwayat
+        $this->validasiJumlahGrade($validated);
+
+        $panen = ModelPanen::create($validated);
+
         RiwayatHelper::catat(
             'Tambah',
             'Panen',
-            'Menambahkan data panen pada ' . $data['tanggal_panen']
+            'Menambahkan data panen ' . $panen->id_panen
+            . ' pada ' . $panen->tanggal_panen->format('d-m-Y')
         );
 
-        return redirect()->route('panen.index')
-            ->with('success', 'Data panen berhasil ditambahkan');
+        return redirect()
+            ->route('panen.index')
+            ->with('success', 'Data panen berhasil ditambahkan.');
     }
 
-    // Form edit panen
-    public function FormEditPanen($id_panen)
-    {
-        if (Auth::user()->role !== 'admin') {
-            return redirect()->route('panen.index')
-                ->with('error', 'Anda tidak memiliki izin untuk mengedit data panen.');
-        }
-        $panen = ModelPanen::findOrFail($id_panen);
-        $greenhouses = ModelGreenhouse::all();
-        return view('panen.form', compact('panen', 'greenhouses'));
-    }
-
-    // Update data panen
+    /**
+     * Memperbarui data panen.
+     */
     public function UpdatePanen(Request $request, $id_panen)
     {
-        if (Auth::user()->role !== 'admin') {
-            return redirect()->route('panen.index')
-                ->with('error', 'Anda tidak memiliki izin untuk mengupdate data panen.');
-        }
-        $data = $request->validate([
-            'tanggal_panen' => 'required|date',
-            'jumlah_panen'  => 'required|integer',
-            'jumlah_grade_a' => 'required|integer',
-            'jumlah_grade_b' => 'required|integer',
-            'jumlah_grade_c' => 'required|integer',
-            'id_greenhouse' => 'required|string|max:10|exists:greenhouse,id_greenhouse',
-        ]);
-
         $panen = ModelPanen::findOrFail($id_panen);
-        $panen->update($data);
 
-        // buat record update ke riwayat
+        $validated = $request->validate($this->rules());
+
+        $this->validasiJumlahGrade($validated);
+
+        $panen->update($validated);
+
         RiwayatHelper::catat(
             'Ubah',
             'Panen',
-            'Mengupdate data panen pada ' . $data['tanggal_panen']
+            'Mengubah data panen ' . $panen->id_panen
+            . ' pada ' . $panen->tanggal_panen->format('d-m-Y')
         );
 
-        return redirect()->route('panen.index')
-            ->with('success', 'Data panen berhasil diupdate');
+        return redirect()
+            ->route('panen.index')
+            ->with('success', 'Data panen berhasil diperbarui.');
     }
 
-    // Hapus data panen
+    /**
+     * Menghapus data panen.
+     */
     public function DestroyPanen($id_panen)
     {
-        if (Auth::user()->role !== 'admin') {
-            return redirect()->route('panen.index')
-                ->with('error', 'Anda tidak memiliki izin untuk menghapus data panen.');
-        }
         $panen = ModelPanen::findOrFail($id_panen);
+
+        $idPanen = $panen->id_panen;
+        $tanggalPanen = $panen->tanggal_panen?->format('d-m-Y') ?? '-';
 
         $panen->delete();
 
-        // buat record hapus ke riwayat
         RiwayatHelper::catat(
             'Hapus',
             'Panen',
-            'Menghapus data panen pada ' . $panen->tanggal_panen,
+            'Menghapus data panen ' . $idPanen
+            . ' pada ' . $tanggalPanen
         );
 
-        return redirect()->route('panen.index')
-            ->with('success', 'Data panen berhasil dihapus');
+        return redirect()
+            ->route('panen.index')
+            ->with('success', 'Data panen berhasil dihapus.');
+    }
+
+    /**
+     * Aturan validasi tambah dan edit panen.
+     */
+    private function rules(): array
+    {
+        return [
+            'tanggal_panen' => 'required|date',
+            'jumlah_panen' => 'required|integer|min:0',
+            'jumlah_grade_a' => 'required|integer|min:0',
+            'jumlah_grade_b' => 'required|integer|min:0',
+            'jumlah_grade_c' => 'required|integer|min:0',
+            'id_greenhouse' => 'required|exists:greenhouse,id_greenhouse',
+        ];
+    }
+
+    /**
+     * Mencegah jumlah grade melebihi jumlah panen.
+     */
+    private function validasiJumlahGrade(array $validated): void
+    {
+        $totalGrade =
+            $validated['jumlah_grade_a']
+            + $validated['jumlah_grade_b']
+            + $validated['jumlah_grade_c'];
+
+        if ($totalGrade > $validated['jumlah_panen']) {
+            throw ValidationException::withMessages([
+                'jumlah_panen' => 'Jumlah grade A, B, dan C tidak boleh melebihi total panen.',
+            ]);
+        }
     }
 }

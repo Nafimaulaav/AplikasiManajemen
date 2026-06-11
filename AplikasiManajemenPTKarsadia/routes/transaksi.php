@@ -3,36 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransaksiController;
 
-// // ===============================
-// // READ (TAMPIL LAPORAN)
-// // ===============================
-// Route::get('/pendapatan', [TransaksiController::class, 'index'])
-//     ->name('pendapatan');
-// // ===============================
-// // CREATE
-// // ===============================
-// Route::get('/pendapatan/tambah', [TransaksiController::class, 'create'])
-//     ->name('transaksi.create');
-
-// Route::post('/pendapatan/simpan', [TransaksiController::class, 'store'])
-//     ->name('transaksi.store');
-// // ===============================
-// // UPDATE
-// // ===============================
-// Route::get('/pendapatan/{id}/edit', [TransaksiController::class, 'edit'])
-//     ->name('transaksi.edit');
-
-// Route::put('/pendapatan/{id}', [TransaksiController::class, 'update'])
-//     ->name('transaksi.update');
-// // ===============================
-// // DELETE
-// // ===============================
-// Route::delete('/pendapatan/{id}', [TransaksiController::class, 'destroy'])
-//     ->name('transaksi.destroy');
-
-// ===============================
-// ADMIN & PETUGAS
-// ===============================
+// Admin dan petugas dapat melihat dan menambahkan transaksi.
 Route::middleware(['auth', 'role:admin,petugas'])->group(function () {
     Route::get('/pendapatan', [TransaksiController::class, 'index'])
         ->name('pendapatan');
@@ -41,16 +12,12 @@ Route::middleware(['auth', 'role:admin,petugas'])->group(function () {
         ->name('transaksi.store');
 });
 
-// ===============================
-// ADMIN ONLY
-// ===============================
+// Form edit berada di modal halaman pendapatan.
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/pendapatan/{id}/edit', [TransaksiController::class, 'edit'])
-        ->name('transaksi.edit');
-
     Route::put('/pendapatan/{id}', [TransaksiController::class, 'update'])
         ->name('transaksi.update');
 
     Route::delete('/pendapatan/{id}', [TransaksiController::class, 'destroy'])
+        ->where('id', 'TR[0-9]+')
         ->name('transaksi.destroy');
 });

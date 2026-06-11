@@ -24,6 +24,10 @@ class ModelTransaksiHarian extends Model
         'total_transaksi_harian',
         'nama_petugas'
     ];
+    protected $casts = [
+    'tanggal_waktu_transaksi' => 'datetime',
+    'total_transaksi_harian' => 'integer',
+    ];
 
     // auto generate id TR0001, TR0002, dst
     protected static function boot()
@@ -35,7 +39,7 @@ class ModelTransaksiHarian extends Model
         });
     }
 
-    private static function generateId()
+    public static function generateId()
     {
         // ambil ID terbesar (TRxxxx terakhir)
         $last = self::orderBy('id_transaksi', 'desc')->first();

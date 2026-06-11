@@ -32,6 +32,7 @@ class ModelQC extends Model
     // cast gambar_qc ke array
     protected $casts = [
         'gambar_qc' => 'array',
+        'tanggal_qc' => 'datetime',
     ];
 
     // relasi ke model greenhouse

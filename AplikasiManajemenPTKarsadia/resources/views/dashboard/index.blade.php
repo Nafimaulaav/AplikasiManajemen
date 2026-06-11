@@ -28,24 +28,25 @@
     <!-- DATA PERFORMA -->
     <div class="row mb-4">
 
-        <div class="col-md-4 mb-3">
-            <div class="card p-3 h-100">
-                <div class="text-muted">Total Pendapatan</div>
-                <strong class="text-success">
-                    Rp {{ number_format($pendapatan, 0, ',', '.') }}
-                </strong>
+        @if ($isAdmin)
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 h-100">
+                    <div class="text-muted">Total Pendapatan</div>
+                    <strong class="text-success">
+                        Rp {{ number_format($pendapatan, 0, ',', '.') }}
+                    </strong>
+                </div>
             </div>
-        </div>
+        @endif
 
-
-        <div class="col-md-4 mb-3">
+        <div class="{{ $isAdmin ? 'col-md-4' : 'col-md-6' }} mb-3">
             <div class="card p-3 h-100">
                 <div class="text-muted">Total Panen</div>
                 <strong>{{ $totalPanen }} Buah</strong>
             </div>
         </div>
 
-        <div class="col-md-4 mb-3">
+        <div class="{{ $isAdmin ? 'col-md-4' : 'col-md-6' }} mb-3">
             <div class="card p-3 h-100">
                 <div class="text-muted">Panen Terakhir</div>
                 <strong>{{ $panenTerakhir }}</strong>
@@ -57,7 +58,7 @@
     <div class="row">
 
         <!-- KIRI -->
-        <div class="col-md-6 mb-4">
+        <div class="{{ $isAdmin ? 'col-md-6' : 'col-md-12' }} mb-4">
 
             <!-- KUALITAS PANEN -->
             <div class="card mb-3 p-3">
@@ -92,42 +93,50 @@
             </div>
 
         </div>
+        @if ($isAdmin)
+            <!-- KANAN -->
+            <div class="col-md-6 mb-4">
+                <div class="card p-3 h-100">
+                    <h5>Riwayat Aktivitas</h5>
 
-        <!-- KANAN -->
-        <div class="col-md-6 mb-4">
-            <div class="card p-3 h-100">
-                <h5>Riwayat Aktivitas</h5>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead>
-                            <tr>
-                                <th>Waktu</th>
-                                <th>Petugas</th>
-                                <th>Aksi</th>
-                                <th>Menu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($riwayat as $log)
-                            <tr>
-                                <td>{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y H:i') }}</td>
-                                <td>{{ $log->user->username ?? $log->user_id }}</td>
-                                <td>{{ $log->tipe_aksi }}</td>
-                                <td>{{ $log->menu_terkait }}</td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="text-center text-muted">
-                                    Tidak ada riwayat aktivitas
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>Petugas</th>
+                                    <th>Aksi</th>
+                                    <th>Menu</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @forelse ($riwayat as $log)
+                                    <tr>
+                                        <td>
+                                            {{ $log->created_at?->format('d M Y H:i') ?? '-' }}
+                                        </td>
+
+                                        <td>
+                                            {{ $log->user->username ?? $log->id_user }}
+                                        </td>
+
+                                        <td>{{ $log->tipe_aksi }}</td>
+                                        <td>{{ $log->menu_terkait }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">
+                                            Tidak ada riwayat aktivitas
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        @endif
     </div>
 </div>
 @endsection

@@ -13,6 +13,17 @@
     @if(session('success'))
         <div id="gh-flash-alert" class="alert-success">{{ session('success') }}</div>
     @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Data belum dapat disimpan:</strong>
+
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- CARD -->
     <div class="panen-card">
@@ -38,7 +49,7 @@
             @forelse($panen as $p)
             <tr
                 data-id="{{ $p->id_panen }}"
-                data-tanggal="{{ $p->tanggal_panen }}"
+                data-tanggal="{{ $p->tanggal_panen?->format('Y-m-d') }}"
                 data-jumlah="{{ $p->jumlah_panen }}"
                 data-a="{{ $p->jumlah_grade_a }}"
                 data-b="{{ $p->jumlah_grade_b }}"
@@ -48,7 +59,7 @@
             >
                 <td>{{ $p->id_panen }}</td>
                 <td>{{ $p->greenhouse->nama_greenhouse ?? '-' }}</td>
-                <td>{{ \Carbon\Carbon::parse($p->tanggal_panen)->format('d-m-Y') }}</td>
+                <td>{{ $p->tanggal_panen?->format('d-m-Y') ?? '-' }}</td>
                 <td>{{ $p->jumlah_panen }}</td>
                 <td>
                     A:{{ $p->jumlah_grade_a }} |
@@ -86,14 +97,18 @@
         @csrf
         <input type="date" name="tanggal_panen" required>
         <select name="id_greenhouse" required>
+            <option value="">-- Pilih Greenhouse --</option>
+
             @foreach($greenhouses as $g)
-                <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
+                <option value="{{ $g->id_greenhouse }}">
+                    {{ $g->id_greenhouse }} - {{ $g->nama_greenhouse }}
+                </option>
             @endforeach
         </select>
-        <input type="number" name="jumlah_panen" placeholder="Jumlah Panen" required>
-        <input type="number" name="jumlah_grade_a" placeholder="Grade A" required>
-        <input type="number" name="jumlah_grade_b" placeholder="Grade B" required>
-        <input type="number" name="jumlah_grade_c" placeholder="Grade C" required>
+        <input type="number" name="jumlah_panen" min="0" placeholder="Jumlah Panen" required>
+        <input type="number" name="jumlah_grade_a" min="0" placeholder="Grade A" required>
+        <input type="number" name="jumlah_grade_b" min="0" placeholder="Grade B" required>
+        <input type="number" name="jumlah_grade_c" min="0" placeholder="Grade C" required>
         <button type="submit" class="btn-submit">Simpan</button>
         <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
         </form>
@@ -111,13 +126,15 @@
             <input type="date" name="tanggal_panen" id="e_tanggal" required>
             <select name="id_greenhouse" id="e_greenhouse" required>
                 @foreach($greenhouses as $g)
-                    <option value="{{ $g->id_greenhouse }}">{{ $g->nama_greenhouse }}</option>
+                    <option value="{{ $g->id_greenhouse }}">
+                        {{ $g->id_greenhouse }} - {{ $g->nama_greenhouse }}
+                    </option>
                 @endforeach
             </select>
-            <input type="number" name="jumlah_panen" id="e_jumlah" required>
-            <input type="number" name="jumlah_grade_a" id="e_a" required>
-            <input type="number" name="jumlah_grade_b" id="e_b" required>
-            <input type="number" name="jumlah_grade_c" id="e_c" required>
+            <input type="number" name="jumlah_panen" id="e_jumlah" min="0" required>
+            <input type="number" name="jumlah_grade_a" id="e_a" min="0" required>
+            <input type="number" name="jumlah_grade_b" id="e_b" min="0" required>
+            <input type="number" name="jumlah_grade_c" id="e_c" min="0" required>
             <button type="submit" class="btn-submit">Update</button>
             <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
             </form>
@@ -174,26 +191,26 @@ function showModal(id){document.getElementById(id).style.display='flex'}
 function closeModal(){document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none')}
 
 @if(auth()->user()->role === 'admin')
-function editPanen(btn){
-    let tr=btn.closest('tr');
-    e_id.value=tr.dataset.id;
-    e_tanggal.value=tr.dataset.tanggal;
-    e_jumlah.value=tr.dataset.jumlah;
-    e_a.value=tr.dataset.a;
-    e_b.value=tr.dataset.b;
-    e_c.value=tr.dataset.c;
-    e_greenhouse.value=tr.dataset.greenhouse;
-    formEdit.action=`/panen/edit/${tr.dataset.id}`;
-    showModal('editModal');
-}
+    function editPanen(btn){
+        let tr=btn.closest('tr');
+        e_id.value=tr.dataset.id;
+        e_tanggal.value=tr.dataset.tanggal;
+        e_jumlah.value=tr.dataset.jumlah;
+        e_a.value=tr.dataset.a;
+        e_b.value=tr.dataset.b;
+        e_c.value=tr.dataset.c;
+        e_greenhouse.value=tr.dataset.greenhouse;
+        formEdit.action=`/panen/edit/${tr.dataset.id}`;
+        showModal('editModal');
+    }
 
-function hapusPanen(btn){
-    let tr=btn.closest('tr');
-    d_id.innerText=tr.dataset.id;
-    d_gh.innerText=tr.dataset.greenhouseNama;
-    formDelete.action=`/panen/hapus/${tr.dataset.id}`;
-    showModal('deleteModal');
-}
+    function hapusPanen(btn){
+        let tr=btn.closest('tr');
+        d_id.innerText=tr.dataset.id;
+        d_gh.innerText=tr.dataset.greenhouseNama;
+        formDelete.action=`/panen/hapus/${tr.dataset.id}`;
+        showModal('deleteModal');
+    }
 @endif
 
 document.getElementById('searchInput').addEventListener('keyup',function(){
