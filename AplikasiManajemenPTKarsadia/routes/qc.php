@@ -2,17 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QCController;
-// buat route qc
-Route::prefix('qc')->group(function () {
-    // nambahin QC
-    Route::get('/tambah/{id_greenhouse}', [QCController::class, 'FormCreateQC'])->name('tambah_qc');
-    // nyimpen data QC baru
-    Route::post('/tambah', [QCController::class, 'store'])->name('store_qc');
-    // ngedit QC
-    Route::get('/edit/{id_log_qc}', [QCController::class, 'FormEditQC'])->name('edit_qc');
-    Route::post('/edit/{id_log_qc}', [QCController::class, 'update'])->name('update_qc');
-    // ngehapus QC
-    Route::delete('/hapus/{id_log_qc}', [QCController::class, 'destroy'])->name('destroy_qc');
+
+Route::prefix('qc')->middleware(['auth', 'role:admin,petugas'])->group(function () {
+    // Form tambah dan edit QC berada di modal halaman detail greenhouse.
+    Route::post('/tambah', [QCController::class, 'store'])
+        ->name('store_qc');
+
+    Route::post('/edit/{id_log_qc}', [QCController::class, 'update'])
+        ->whereNumber('id_log_qc')
+        ->name('update_qc');
+
+    Route::delete('/hapus/{id_log_qc}', [QCController::class, 'destroy'])
+        ->whereNumber('id_log_qc')
+        ->name('destroy_qc');
 });
-
-

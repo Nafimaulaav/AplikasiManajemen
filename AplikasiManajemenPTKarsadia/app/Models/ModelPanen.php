@@ -28,6 +28,10 @@ class ModelPanen extends Model
         'id_greenhouse'
     ];
 
+    protected $casts = [
+    'tanggal_panen' => 'date',
+    ];
+
     // relasi ke model greenhouse
     public function greenhouse()
     {

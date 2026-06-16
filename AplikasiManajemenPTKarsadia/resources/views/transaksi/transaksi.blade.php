@@ -80,6 +80,17 @@
             <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
         </div>
     @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Data belum dapat disimpan:</strong>
+
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="header-gh d-flex justify-content-between align-items-center mb-4">
         <h1 class="judulgh">Laporan Pendapatan</h1>
@@ -130,21 +141,28 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->id_transaksi }}</td>
-                            <td>{{ \Carbon\Carbon::parse($item->tanggal_waktu_transaksi)->format('d-m-Y H:i') }}</td>
+                            <td>{{ $item->tanggal_waktu_transaksi?->format('d-m-Y H:i') ?? '-' }}</td>
                             <td>{{ $item->nama_petugas }}</td>
                             <td>Rp {{ number_format($item->total_transaksi_harian, 0, ',', '.') }}</td>
                             <td class="text-center">
                                 @if(auth()->user()->role === 'admin')
-                                    {{-- Tombol Edit yang memicu JavaScript --}}
-                                    <button type="button" class="btn btn-sm btn-warning" 
-                                        onclick="openEditModal('{{ $item->id_transaksi }}', '{{ $item->tanggal_waktu_transaksi }}', '{{ $item->total_transaksi_harian }}', '{{ $item->nama_petugas }}')">
+                                    <button type="button"
+                                            class="btn btn-sm btn-warning"
+                                            data-id="{{ $item->id_transaksi }}"
+                                            data-url="{{ route('transaksi.update', ['id' => $item->id_transaksi]) }}"
+                                            data-tanggal="{{ $item->tanggal_waktu_transaksi?->format('Y-m-d\TH:i') }}"
+                                            data-total="{{ $item->total_transaksi_harian }}"
+                                            data-petugas="{{ $item->nama_petugas }}"
+                                            onclick="openEditModal(this)">
                                         Edit
                                     </button>
 
-                                    <form action="{{ route('transaksi.destroy', $item->id_transaksi) }}" method="POST" class="d-inline">
-                                        @csrf @method('DELETE')
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal('{{ $item->id_transaksi }}')">Hapus</button>
-                                    </form>
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            data-id="{{ $item->id_transaksi }}"
+                                            onclick="openDeleteModal(this)">
+                                        Hapus
+                                    </button>
                                 @else
                                     <span style="color:#aaa;">Tidak ada aksi</span>
                                 @endif
@@ -169,7 +187,9 @@
             @csrf
             <div class="form-group-custom">
                 <label>ID Transaksi</label>
-                <input type="text" placeholder="Otomatis (TRXXXX)" disabled>
+                <input type="text"
+                    value="{{ $newId }}"
+                    readonly>
             </div>
             <div class="form-group-custom">
                 <label>Tanggal Transaksi</label>
@@ -177,11 +197,20 @@
             </div>
             <div class="form-group-custom">
                 <label>Jumlah Pendapatan</label>
-                <input type="number" name="total_transaksi_harian" placeholder="Rp" required>
+                <input type="number"
+                    name="total_transaksi_harian"
+                    min="0"
+                    step="0"
+                    placeholder="Rp"
+                    required>
             </div>
             <div class="form-group-custom">
                 <label>Nama Petugas</label>
-                <input type="text" name="nama_petugas" placeholder="Nama Petugas" required>
+                <input type="text"
+                    name="nama_petugas"
+                    maxlength="100"
+                    placeholder="Nama Petugas"
+                    required>
             </div>
             <div class="modal-actions">
                 <button type="submit" class="btn-submit-custom">Tambahkan</button>
@@ -198,24 +227,53 @@
             <h3>Edit Transaksi</h3>
             <span id="edit_id_label" class="badge bg-warning text-dark"></span>
         </div>
-        <form id="formEditAction" method="POST">
+        <form id="formEditAction" method="POST" action="">
             @csrf
             @method('PUT')
+
+            <div class="form-group-custom">
+                <label>ID Transaksi</label>
+                <input type="text"
+                    id="edit_id_display"
+                    readonly>
+            </div>
             <div class="form-group-custom">
                 <label>Tanggal Transaksi</label>
-                <input type="datetime-local" name="tanggal_waktu_transaksi" id="edit_tanggal" required>
+                <input type="datetime-local"
+                    name="tanggal_waktu_transaksi"
+                    id="edit_tanggal"
+                    required>
             </div>
+
             <div class="form-group-custom">
                 <label>Jumlah Pendapatan</label>
-                <input type="number" name="total_transaksi_harian" id="edit_total" required>
+                <input type="number"
+                    name="total_transaksi_harian"
+                    id="edit_total"
+                    min="1"
+                    step="1"
+                    required>
             </div>
+
             <div class="form-group-custom">
                 <label>Nama Petugas</label>
-                <input type="text" name="nama_petugas" id="edit_petugas" required>
+                <input type="text"
+                    name="nama_petugas"
+                    id="edit_petugas"
+                    maxlength="100"
+                    required>
             </div>
+
             <div class="modal-actions">
-                <button type="submit" class="btn-submit-custom">Simpan Perubahan</button>
-                <button type="button" class="btn btn-cancel-custom" onclick="toggleEditModal(false)">Batal</button>
+                <button type="submit" class="btn-submit-custom">
+                    Simpan Perubahan
+                </button>
+
+                <button type="button"
+                        class="btn btn-cancel-custom"
+                        onclick="toggleEditModal(false)">
+                    Batal
+                </button>
             </div>
         </form>
     </div>
@@ -240,74 +298,85 @@
 </div>
 
 <script>
-    // Logika Modal Tambah
+    // Menampilkan atau menyembunyikan modal tambah.
     function toggleAddModal(show) {
-        document.getElementById('modalTambah').style.display = show ? 'block' : 'none';
+        document.getElementById('modalTambah').style.display =
+            show ? 'flex' : 'none';
     }
 
-    // Logika Modal Edit
+    // Menampilkan atau menyembunyikan modal edit.
     function toggleEditModal(show) {
-        document.getElementById('modalEdit').style.display = show ? 'block' : 'none';
+        document.getElementById('modalEdit').style.display =
+            show ? 'flex' : 'none';
     }
 
-    function openEditModal(id, tanggal, total, petugas) {
-        // Set URL Form Update secara dinamis
-        document.getElementById('formEditAction').action = "/pendapatan/" + id;
-        
-        // Isi Label ID
-        document.getElementById('edit_id_label').innerText = id;
+    // Mengisi data modal edit dari atribut data-* tombol.
+    function openEditModal(button) {
+        document.getElementById('formEditAction').action =
+            button.dataset.url;
 
-        // Format Tanggal (Menghilangkan detik agar cocok dengan datetime-local)
-        // input: "2023-10-25 14:30:00" -> output: "2023-10-25T14:30"
-        let dateFormatted = tanggal.replace(" ", "T").substring(0, 16);
-        document.getElementById('edit_tanggal').value = dateFormatted;
+        document.getElementById('edit_id_display').value =
+            button.dataset.id;
 
-        // Isi field lainnya
-        document.getElementById('edit_total').value = total;
-        document.getElementById('edit_petugas').value = petugas;
+        document.getElementById('edit_id_label').innerText =
+            button.dataset.id;
 
-        // Tampilkan Modal
+        document.getElementById('edit_tanggal').value =
+            button.dataset.tanggal;
+
+        document.getElementById('edit_total').value =
+            button.dataset.total;
+
+        document.getElementById('edit_petugas').value =
+            button.dataset.petugas;
+
         toggleEditModal(true);
     }
 
-    // Klik luar modal untuk menutup
-    // window.onclick = function(event) {
-    //     const modalAdd = document.getElementById('modalTambah');
-    //     const modalEdit = document.getElementById('modalEdit');
-    //     if (event.target == modalAdd) toggleAddModal(false);
-    //     if (event.target == modalEdit) toggleEditModal(false);
-    // }
-    window.onclick = function(event) {
-    const modals = [
-        document.getElementById('modalTambah'),
-        document.getElementById('modalEdit'),
-        document.getElementById('modalHapus')
-    ];
-
-    modals.forEach(modal => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-}
-
-    // Logika Modal Hapus
+    // Menampilkan atau menyembunyikan modal hapus.
     function toggleDeleteModal(show) {
-        document.getElementById('modalHapus').style.display = show ? 'block' : 'none';
+        document.getElementById('modalHapus').style.display =
+            show ? 'flex' : 'none';
     }
-    function openDeleteModal(id) {
-        document.getElementById('formHapusAction').action = "/pendapatan/" + id;
+
+    // Mengatur ID transaksi yang akan dihapus.
+    function openDeleteModal(button) {
+        document.getElementById('formHapusAction').action =
+            '/pendapatan/' + button.dataset.id;
+
+        document.getElementById('hapus_id_display').innerText =
+            button.dataset.id;
+
         toggleDeleteModal(true);
     }
 
-    // biar notif ilang sendiri setelah 3 detik
-    document.addEventListener('DOMContentLoaded', () => {
+    // Tutup modal ketika pengguna mengeklik area gelap di luar popup.
+    window.addEventListener('click', function (event) {
+        const modals = [
+            document.getElementById('modalTambah'),
+            document.getElementById('modalEdit'),
+            document.getElementById('modalHapus')
+        ];
+
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+
+    // Sembunyikan notifikasi setelah 3 detik.
+    document.addEventListener('DOMContentLoaded', function () {
         const alertBox = document.querySelector('.alert');
+
         if (alertBox) {
             setTimeout(() => {
+                alertBox.style.transition = 'opacity 0.5s ease';
                 alertBox.style.opacity = '0';
-                alertBox.style.transition = 'opacity 0.5s';
-                setTimeout(() => alertBox.remove(), 500);
+
+                setTimeout(() => {
+                    alertBox.remove();
+                }, 500);
             }, 3000);
         }
     });

@@ -2,54 +2,86 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\ModelGreenhouse;
-use App\Models\ModelPanen;
-use App\Models\ModelTransaksiHarian;
 use App\Models\ModelLaporanHarian;
+use App\Models\ModelPanen;
 use App\Models\ModelRiwayat;
+use App\Models\ModelTransaksiHarian;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    /**
+     * Menampilkan ringkasan data aplikasi.
+     */
     public function index()
     {
-        $pendaptan = 0;
+        $isAdmin = Auth::user()?->role === 'admin';
 
-        if (Auth::check() && Auth::user()->role === 'admin'){
-            $pendaptan = ModelTransaksiHarian::sum('total_transaksi_harian');
-        }
+        $panenTerakhir = ModelPanen::orderByDesc('tanggal_panen')->first();
 
-        $panenTerakhir = ModelPanen::orderBy('tanggal_panen', 'desc')->first();
+        $tanggalPanenTerakhir = $panenTerakhir?->tanggal_panen
+            ? Carbon::parse($panenTerakhir->tanggal_panen)->format('d-m-Y')
+            : '-';
+
         return view('dashboard.index', [
-             //status greenhouse
-            'aktif' => ModelGreenhouse::where('status_greenhouse', 'Aktif')->count(),
-            'perbaikan' => ModelGreenhouse::where('status_greenhouse', 'Perbaikan')->count(),
-            'tidak_aktif' => ModelGreenhouse::where('status_greenhouse', 'Tidak Aktif')->count(),
+            // Hak akses.
+            'isAdmin' => $isAdmin,
 
-            // kualitas panen
+            // Status greenhouse.
+            'aktif' => ModelGreenhouse::where(
+                'status_greenhouse',
+                'Aktif'
+            )->count(),
+
+            'perbaikan' => ModelGreenhouse::where(
+                'status_greenhouse',
+                'Perbaikan'
+            )->count(),
+
+            'tidak_aktif' => ModelGreenhouse::where(
+                'status_greenhouse',
+                'Tidak Aktif'
+            )->count(),
+
+            // Kualitas panen.
             'kualitasA' => ModelPanen::sum('jumlah_grade_a'),
             'kualitasB' => ModelPanen::sum('jumlah_grade_b'),
             'kualitasC' => ModelPanen::sum('jumlah_grade_c'),
 
-            //total panen
+            // Total dan tanggal panen terakhir.
             'totalPanen' => ModelPanen::sum('jumlah_panen'),
+            'panenTerakhir' => $tanggalPanenTerakhir,
 
-            // panen terkahir
-            'panenTerakhir' => $panenTerakhir ? $panenTerakhir->tanggal_panen : 0,
+            // Pendapatan hanya ditampilkan kepada admin.
+            'pendapatan' => $isAdmin
+                ? ModelTransaksiHarian::sum('total_transaksi_harian')
+                : null,
 
-            //Pendapatan
-            'pendapatan' => $pendaptan,
+            // Laporan harian.
+            'laporanPerawatan' => ModelLaporanHarian::where(
+                'aktivitas',
+                'Perawatan'
+            )->count(),
 
-            // laporan
-            'laporanPerawatan' => ModelLaporanHarian::where('aktivitas', 'Perawatan')->count(),
-            'laporanPenanaman' => ModelLaporanHarian::where('aktivitas', 'Penanaman')->count(),
-            'laporanPembersihan' => ModelLaporanHarian::where('aktivitas', 'Pembersihan')->count(),
+            'laporanPenanaman' => ModelLaporanHarian::where(
+                'aktivitas',
+                'Penanaman'
+            )->count(),
 
+            'laporanPembersihan' => ModelLaporanHarian::where(
+                'aktivitas',
+                'Pembersihan'
+            )->count(),
 
-            // riwayat
-            'riwayat' => ModelRiwayat::latest()->take(5)->get(),  
+            // Riwayat aktivitas hanya ditampilkan kepada admin.
+            'riwayat' => $isAdmin
+                ? ModelRiwayat::with('user')
+                    ->latest('created_at')
+                    ->take(5)
+                    ->get()
+                : collect(),
         ]);
-        
     }
 }

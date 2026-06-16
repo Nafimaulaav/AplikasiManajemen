@@ -22,6 +22,17 @@
         @if(session('success'))
             <div id="gh-flash-alert" class="gh-alert-success">{{ session('success') }}</div>
         @endif
+        @if ($errors->any())
+            <div style="padding: 12px; margin-bottom: 15px; border: 1px solid #dc3545; color: #b02a37; background: #f8d7da; border-radius: 6px;">
+                <strong>Data belum dapat disimpan:</strong>
+
+                <ul style="margin: 8px 0 0 18px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <div class="gh-main-grid">
             {{-- Kiri: Monitoring & Spesifikasi --}}
@@ -57,7 +68,7 @@
 
                                     <div class="gh-form-group">
                                         <label for="waktu_monitoring">Waktu Monitoring</label>
-                                        <input type="datetime-local" name="waktu_monitoring" class="gh-input" value="{{ \Carbon\Carbon::parse($greenhouse->waktu_monitoring)->format('Y-m-d\TH:i') }}" required>
+                                        <input type="datetime-local" name="waktu_monitoring" class="gh-input" value="{{ $greenhouse->waktu_monitoring ? $greenhouse->waktu_monitoring->format('Y-m-d\TH:i') : '' }}" required>
                                     </div>
 
                                     <div class="gh-form-group">
@@ -86,11 +97,26 @@
                         </div>
                     </div>
                     <ul class="gh-list">
-                        <li><strong>Waktu Monitoring:</strong> {{ optional($greenhouse->waktu_monitoring)->format('d/m/Y H:i') ?? '-' }}</li>
-                        <li><strong>Suhu:</strong> {{ $greenhouse->suhu_greenhouse }}°C</li>
-                        <li><strong>Kelembapan:</strong> {{ $greenhouse->kelembaban_greenhouse }}%</li>
-                        <li><strong>Intensitas Cahaya:</strong> {{ $greenhouse->intensitas_cahaya_greenhouse }} lux</li>
-                        <li><strong>Volume Air:</strong> {{ $greenhouse->volume_air_greenhouse }} L</li>
+                        <li>
+                            <strong>Waktu Monitoring:</strong>
+                            {{ $greenhouse->waktu_monitoring?->format('d/m/Y H:i') ?? '-' }}
+                        </li>
+                        <li>
+                            <strong>Suhu:</strong>
+                            {{ $greenhouse->suhu_greenhouse ?? '-' }}°C
+                        </li>
+                        <li>
+                            <strong>Kelembapan:</strong>
+                            {{ $greenhouse->kelembaban_greenhouse ?? '-' }}%
+                        </li>
+                        <li>
+                            <strong>Intensitas Cahaya:</strong>
+                            {{ $greenhouse->intensitas_cahaya_greenhouse ?? '-' }} lux
+                        </li>
+                        <li>
+                            <strong>Volume Air:</strong>
+                            {{ $greenhouse->volume_air_greenhouse ?? '-' }} L
+                        </li>
                     </ul>
                 </div>
 
@@ -131,10 +157,22 @@
 
                     </div>
                     <ul class="gh-list">
-                        <li><strong>Luas:</strong> {{ $greenhouse->luas_greenhouse }} m²</li>
-                        <li><strong>Tinggi:</strong> {{ $greenhouse->tinggi_greenhouse }} m</li>
-                        <li><strong>Sistem yang Dipakai:</strong> {{ $greenhouse->sistem_dipakai_greenhouse }}</li>
-                        <li><strong>Alamat:</strong> {{ $greenhouse->alamat_greenhouse }}</li>
+                        <li>
+                            <strong>Luas:</strong>
+                            {{ $greenhouse->luas_greenhouse ?? '-' }} m²
+                        </li>
+                        <li>
+                            <strong>Tinggi:</strong>
+                            {{ $greenhouse->tinggi_greenhouse ?? '-' }} m
+                        </li>
+                        <li>
+                            <strong>Sistem yang Dipakai:</strong>
+                            {{ $greenhouse->sistem_dipakai_greenhouse ?? '-' }}
+                        </li>
+                        <li>
+                            <strong>Alamat:</strong>
+                            {{ $greenhouse->alamat_greenhouse ?? '-' }}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -154,7 +192,7 @@
 
                                 <h2 class="gh-modal-title">Tambah Log QC</h2>
 
-                                <form action="{{ route('store_qc', $greenhouse->id_greenhouse) }}" method="POST" enctype="multipart/form-data" class="gh-form">
+                                <form action="{{ route('store_qc') }}" method="POST" enctype="multipart/form-data" class="gh-form">
                                     @csrf
 
                                     <div class="gh-form-section">
@@ -184,7 +222,6 @@
                                                 <option value="Vegetatif">Vegetatif</option>
                                                 <option value="Generatif">Generatif</option>
                                                 <option value="Panen">Panen</option>
-                                                <option value="Gegetatif">Gegetatif</option>
                                             </select>
                                         </div>
 
@@ -266,7 +303,7 @@
                                                     <div class="gh-form-group">
                                                         <label for="status_tumbuh">Status Tumbuh</label>
                                                         <select name="status_tumbuh" class="gh-input" required>
-                                                            @foreach (['Vegetatif', 'Generatif', 'Panen', 'Gegetatif'] as $status)
+                                                            @foreach (['Vegetatif', 'Generatif', 'Panen'] as $status)
                                                                 <option value="{{ $status }}" {{ $qc->status_tumbuh == $status ? 'selected' : '' }}>{{ $status }}</option>
                                                             @endforeach
                                                         </select>
@@ -298,8 +335,17 @@
                                                     </div>
 
                                                     <div class="gh-form-group">
-                                                        <label for="gambar_qc[]">Upload Foto Baru (opsional)</label>
-                                                        <input type="file" name="gambar_qc[]" class="gh-input" multiple accept="image/*">
+                                                        <label for="gambar_qc[]">
+                                                            Upload Foto Baru (opsional, maks. 4 gambar)
+                                                        </label>
+                                                        <small>
+                                                            Jika foto baru dipilih, seluruh foto lama akan diganti.
+                                                        </small>
+                                                        <input type="file"
+                                                            name="gambar_qc[]"
+                                                            class="gh-input"
+                                                            multiple
+                                                            accept="image/*">
                                                     </div>
                                                 </div>
 
@@ -308,7 +354,6 @@
                                         </div>
                                     </div>
 
-                                </a>
                                 <!-- <form action="{{ route('destroy_qc', $qc->id_log_qc) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                     @csrf
                                     @method('DELETE')
@@ -316,6 +361,7 @@
                                         <i class="bi bi-trash-fill"></i> Hapus
                                     </button>
                                 </form> -->
+
                                 <a href="javascript:void(0)" onclick="openModal('modalDeleteQC{{ $qc->id_log_qc }}')" class="gh-btn-hapus">
                                     <i class="bi bi-trash-fill"></i> Hapus
                                 </a>
@@ -337,8 +383,10 @@
 
                         <div class="gh-qc-body">
                             <div class="gh-qc-gallery">
-                                @foreach(array_slice($qc->gambar_qc, 0, 4) as $img)
-                                    <img src="{{ asset('storage/'.$img) }}" class="gh-qc-thumb" alt="Foto QC">
+                                @foreach(array_slice($qc->gambar_qc ?? [], 0, 4) as $img)
+                                    <img src="{{ asset('storage/' . $img) }}"
+                                        class="gh-qc-thumb"
+                                        alt="Foto QC">
                                 @endforeach
                             </div>
 

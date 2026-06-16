@@ -191,3 +191,18 @@
 .modal-content {
     margin-top: 100px;
 }
+.modal-responsive {
+    width: calc(100% - 24px);
+    max-width: 900px;
+    margin: 12px auto;
+}
+
+.modal-responsive .modal-content {
+    max-height: calc(100vh - 24px);
+    overflow: hidden;
+}
+
+.modal-responsive .modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 160px);
+}

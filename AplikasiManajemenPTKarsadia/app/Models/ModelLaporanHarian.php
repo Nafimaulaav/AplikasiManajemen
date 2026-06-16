@@ -29,6 +29,10 @@ class ModelLaporanHarian extends Model
         'id_greenhouse'
     ];
 
+    protected $casts = [
+        'tanggal_laporan' => 'date',
+    ];
+
     // relasi ke model greenhouse
     public function greenhouse()
     {

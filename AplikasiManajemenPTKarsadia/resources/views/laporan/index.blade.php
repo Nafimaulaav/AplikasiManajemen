@@ -3,16 +3,29 @@
 @section('content')
 <div class="container">
     <div id="alert-success"></div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Data belum dapat disimpan:</strong>
+
+              <ul class="mb-0 mt-2">
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+        </div>
+    @endif
     <div class="header-gh d-flex justify-content-between align-items-center mb-4">
         <h1 class="judullaporan">Laporan Harian</h1>
-        @if (Auth::user()->role === 'admin' || Auth::user()->role === 'petugas')
-            <button type="button" class="btn btn-tambah" data-bs-toggle="modal" data-bs-target="#modalTambahLaporan">
-                <i class="bi bi-plus"></i> Tambah Laporan
-            </button>
-        @endif
+        
+        <button type="button"
+                class="btn btn-tambah"
+                data-bs-toggle="modal"
+                data-bs-target="#modalTambahLaporan">
+            <i class="bi bi-plus-lg"></i> Tambah Laporan
+        </button>
         {{-- Modal Tambah Laporan --}}
         <div class="modal fade" id="modalTambahLaporan" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-responsive">
                 <div class="modal-content">
                 <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -32,13 +45,13 @@
                       <div class="mb-3">
                           <label>Greenhouse</label>
                           <select name="id_greenhouse" class="form-select" required>
-                            <option value="">
+                              <option value="">-- Pilih Greenhouse --</option>
+
                               @foreach ($greenhouse as $gh)
-                                <option value="{{ $gh->id_greenhouse }}">
-                                  {{ $gh->id_greenhouse }} - {{ $gh->nama_greenhouse }}
-                                </option>
+                                  <option value="{{ $gh->id_greenhouse }}">
+                                      {{ $gh->id_greenhouse }} - {{ $gh->nama_greenhouse }}
+                                  </option>
                               @endforeach
-                            </option>
                           </select>
                       </div>
                       <div class="mb-3">
@@ -59,7 +72,7 @@
                       </div>
                       <div class="mb-3">
                           <label>Gambar (Opsional)</label>
-                          <input type="file" name="gambar_laporan" class="form-control" >
+                          <input type="file" name="gambar_laporan" class="form-control" accept="image/*">
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -87,6 +100,7 @@
                             data-id="{{ $laporan->id_laporanharian }}"
                             data-judul="{{ $laporan->judul_laporan }}"
                             data-tanggal="{{ \Carbon\Carbon::parse($laporan->tanggal_laporan)->format('Y-m-d') }}"
+                            data-greenhouse="{{ $laporan->id_greenhouse }}"
                             data-petugas="{{ $laporan->nama_petugas }}"
                             data-aktivitas="{{ $laporan->aktivitas }}"
                             data-catatan="{{ $laporan->catatan }}"
@@ -127,7 +141,7 @@
 
                             {{-- Modal Edit Laporan --}}
                       <div class="modal fade" id="modalEditLaporan" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-responsive">
                           <div class="modal-content">
                             <form id="formEditLaporan" method="POST" enctype="multipart/form-data">
                               @csrf
@@ -148,11 +162,13 @@
                                 </div>
                                 <div class="mb-3">
                                   <label>Greenhouse</label>
-                                  <select name="id_greenhouse" class="form-select" required>
+                                  <select name="id_greenhouse"
+                                          id="editGreenhouse"
+                                          class="form-select"
+                                          required>
                                       @foreach ($greenhouse as $gh)
-                                          <option value="{{ $gh->id_greenhouse }}"
-                                              {{ $gh->id_greenhouse ? 'selected' : '' }}>
-                                              {{ $gh->nama_greenhouse }}
+                                          <option value="{{ $gh->id_greenhouse }}">
+                                              {{ $gh->id_greenhouse }} - {{ $gh->nama_greenhouse }}
                                           </option>
                                       @endforeach
                                   </select>
@@ -175,7 +191,7 @@
                                 </div>
                                 <div class="mb-3">
                                   <label>Gambar (Opsional)</label>
-                                  <input type="file" name="gambar_laporan" class="form-control">
+                                  <input type="file" name="gambar_laporan" class="form-control" accept="image/*">
                                 </div>
                               </div>
                               <div class="modal-footer">
@@ -188,7 +204,7 @@
 
                     {{-- Modal Hapus Laporan --}}
                   <div class="modal fade" id="modalHapusLaporan" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-responsive">
                       <div class="modal-content">
                         <form id="formHapusLaporan" method="POST">
                           @csrf
@@ -226,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('editId').value = id;
             document.getElementById('editJudul').value = this.dataset.judul;
             document.getElementById('editTanggal').value = this.dataset.tanggal;
+            document.getElementById('editGreenhouse').value = this.dataset.greenhouse;
             document.getElementById('editPetugas').value = this.dataset.petugas;
             document.getElementById('editAktivitas').value = this.dataset.aktivitas;
             document.getElementById('editCatatan').value = this.dataset.catatan;
